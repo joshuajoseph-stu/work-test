@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Delete Train</title>
+    <script>
+
+      function deleteTrain() {
+
+          const trainNo = document.getElementById("trainNo").value;
+
+          async function deleteTrainData() {
+              const url = 'http://localhost:9191/api/train/' + trainNo;
+
+              const data = {
+                  method: 'DELETE',
+                  headers: {
+                      'Accept': 'application/json',
+                      'Content-Type': 'application/json'
+                  },
+                  body: null
+              };
+              const rawResponse = await fetch(url, data);
+              // const content = await rawResponse.json();
+
+              alert("Train deleted Successfully");
+
+              // console.log(content);
+          }
+          deleteTrainData();
+
+      }
+
+  </script>
+    <link rel="stylesheet" href="deletetrain.css">
+  </head>
+  <body>
+    <div class= "full-page">
+
+    </div>
+    <div class="center">
+      <h1>Delete Train</h1>
+      <div class="container">
+
+        <!-- <h1>Delete the Train</h1> -->
+
+        <form>
+
+            Train Number: <input type="text" id="trainNo">
+            <input type="button" value="Delete" class="btn btn-danger" onclick="deleteTrain()">
+        </form>
+
+    </div>
+    </div>
+
+  </body>
+</html>
