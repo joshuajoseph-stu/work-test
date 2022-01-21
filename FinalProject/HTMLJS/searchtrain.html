@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Search Train</title>
+    <script>
+        function createTable(jsonStr) {
+
+                const jsonObj = JSON.parse(jsonStr);
+
+                //  const data = jsonObj.data;  
+                const data = jsonObj;
+
+                const tableBody = document.getElementById('table_body')
+
+                let obj = data;
+
+                const row = document.createElement('tr');
+
+                const cell1 = document.createElement('td');
+                cell1.innerHTML = obj.trainNo;
+                const cell2 = document.createElement('td');
+                cell2.innerHTML = obj.trainName;
+                const cell3 = document.createElement('td');
+                cell3.innerHTML = obj.source;
+                const cell4 = document.createElement('td');
+                cell4.innerHTML = obj.destination;
+                const cell5 = document.createElement('td');
+                cell5.innerHTML = obj.ticketPrice;
+
+                const cell6 = document.createElement('td');
+                const btnBook = document.createElement('button');
+                btnBook.classList.add('btn', 'btn-primary');
+                btnBook.innerHTML = 'Book';
+
+                // const btnEdit = document.createElement('button');
+                // btnEdit.innerHTML = 'Edit';
+                // btnEdit.classList.add('btn', 'btn-success');
+                // btnEdit.innerHTML = 'Edit';
+
+                // const btnDelete = document.createElement('button');
+                // btnDelete.classList.add('btn', 'btn-danger');
+                // btnDelete.innerHTML = 'Delete';
+
+                    cell6.appendChild(btnBook);
+                    // cell6.appendChild(btnEdit);
+                    // cell6.appendChild(btnDelete);
+
+                    row.appendChild(cell1);
+                    row.appendChild(cell2);
+                    row.appendChild(cell3);
+                    row.appendChild(cell4);
+                    row.appendChild(cell5);
+                    row.appendChild(cell6);
+
+
+                    tableBody.appendChild(row);
+                    }
+                
+        function getTrainById() {
+ 
+            const trainNo = document.getElementById("trainNo").value;
+            async function getTrainData() {
+                const url = 'http://localhost:9191/api/train/' + trainNo;
+                console.log(url);
+                const data = {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                    }
+                    
+                };
+                const rawResponse = await fetch(url, data);
+                console.log(rawResponse);
+                let content = await rawResponse.text();
+
+
+                alert("Train found Successfully");
+                createTable(content);
+                
+            }
+          
+            getTrainData();
+
+        }
+
+    </script>
+    <link rel="stylesheet" href="deletetrain.css">
+  </head>
+  <body>
+    <div class= "full-page">
+
+    </div>
+    <div class="center">
+        <h1>Search Train</h1>
+        <div class="container">
+  
+          <h1>Search for specific Train</h1>
+  
+          <form>
+  
+              Train Number: <input type="text" id="trainNo">
+              <input type="button" value="Search" class="btn btn-danger" onclick="getTrainById()">
+          </form>
+          <div id="train_details" class="container">
+
+            <table>
+                <thead>
+    
+                    <tr>
+                        <th>Train Number</th>
+                        <th>Train Name</th>
+                        <th>Source</th>
+                        <th>Destination</th>
+                        <th>Fare</th>
+                        <th>Book Ticket</th>
+                    </tr>
+    
+                </thead>
+    
+                <tbody id="table_body">
+    
+                </tbody>
+    
+            </table>
+    
+        </div>
+      </div>
+      </div>
+  
+    </body>
+  </html>

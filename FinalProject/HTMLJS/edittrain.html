@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Edit Train</title>
+    <link rel="stylesheet" href="edittrain.css">
+  </head>
+  <body>
+    <div class= "full-page">
+
+    </div>
+    <div class="center">
+      <h1>Edit Train</h1>
+      <form id="frm" method="get" action="">
+        <!-- <div class="txt_field">
+          <input type="text" required>
+          <span></span>
+          <label>Train No.</label>
+        </div> -->
+        <div class="txt_field">
+          <input type="number" id="1" name="trainNo"required>
+          <span></span>
+          <label>Train No.</label>
+        </div>
+        <!-- <div class="txt_field">
+          <input type="text" required>
+          <span></span>
+          <label>Train Name</label>
+        </div> -->
+        <div class="txt_field">
+          <input type="text" id="2" name="train_name" required>
+          <span></span>
+          <label>Train Name</label>
+        </div>
+        <!-- <div class="txt_field">
+            <input type="text" required>
+            <span></span>
+            <label>Source</label>
+          </div> -->
+          <div class="txt_field">
+            <input type="text" id="3" name="source" required>
+            <span></span>
+            <label>Source</label>
+          </div>
+
+          <!-- <div class="txt_field">
+            <input type="text" required>
+            <span></span>
+            <label>Destinaion</label>
+          </div> -->
+
+          <div class="txt_field">
+            <input type="text" name="destination" id="4" required>
+            <span></span>
+            <label>Destinaion</label>
+          </div>
+
+        <!-- <div class="txt_field">
+          <input type="text" required>
+          <span></span>
+          <label>Fare</label>
+        </div> -->
+        <div class="txt_field">
+          <input type="number" name="ticketfare" id="5" required>
+          <span></span>
+          <label>Fare</label>
+        </div>
+
+        
+        <!-- <input type="submit" value="Add Train" onclick="alert('Train Added Successfully');" > -->
+        <input type="submit" value="Edit Train" onclick="validateTrain()" >
+        <div class="signup_link">
+          Copyright 2017-2021 <a href="#"></a>
+        
+      </form>
+      <script>
+
+        function validateTrain() {
+
+            const form = document.getElementById("frm");
+
+            const tno = Number(document.getElementById("1").value);
+            const tname = document.getElementById("2").value;
+            const source = document.getElementById("3").value;
+            const dest = document.getElementById("4").value;
+            const fare = Number(document.getElementById("5").value);
+
+
+            if (tno == "" || tno.length < 5) {
+                window.alert("Train Number above 5 ");
+            }
+            else if (tname == null || tname == "") {
+                window.alert("Train Name Should not be null ");
+            }
+            else if (source == null || source == "") {
+                alert("Source Name Not Null");
+                return false;
+            }
+            else if (dest == null || dest == "") {
+                alert("Destination Name Not Null");
+                return false;
+            }
+            else if (fare == null || fare == "") {
+                window.alert("Fare Not Null");
+            }
+            else {
+
+                const trainObj = {
+                    "trainNo": tno,
+                    "trainName": tname,
+                    "source": source,
+                    "destination": dest,
+                    "ticketPrice": fare
+                }
+
+                async function editTrainData() {
+                    const url = 'http://localhost:9191/api/train';
+
+                    const data = {
+                        method: 'PUT',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(trainObj)
+                    };
+                    const rawResponse = await fetch(url, data);
+                    const content = await rawResponse.json();
+
+                    console.log(content);
+                }
+                editTrainData();
+
+                //   form.submit();
+            }
+        }
+
+    </script>
+    </div>
+
+  </body>
+</html>
