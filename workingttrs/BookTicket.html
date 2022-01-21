@@ -2,40 +2,173 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>All Train</title>
-    <script src="/ahuja-sagar Test main boot/getTrainData.js"></script>
-    <link rel="stylesheet" href="addtrain.css">
+    <title>Book Ticket</title>
+    <link rel="stylesheet" href="BookTicket.css">
   </head>
   <body>
     <div class= "full-page">
 
     </div>
     <div class="center">
-      <h1>All Trains details
-      </h1>
-      <div id="train_details" class="container">
+      <h1>Book Ticket</h1>
+      <form id="contact-form" method="get" action="">
+        <!-- <div class="txt_field">
+          <input type="text" required>
+          <span></span>
+          <label>Name</label>
+        </div> -->
+        <div class="txt_field">
+          <input type="text" required>
+          <span></span>
+          <label>Name</label>
+        </div>
+        <div class="txt_field">
+          <input type="text" id="1" required>
+          <span></span>
+          <label>Date</label>
+        </div>
+        <div class="txt_field">
+            <input type="text" id="2" required>
+            <span></span>
+            <label>Train Number</label>
+          </div>
+          <div class="txt_field">
+            <input type="text" id="3" required>
+            <span></span>
+            <label>Passenger Number</label>
+          </div>
+          <div><label id="tcost"></label></div>
+          <!-- <div class="txt_field">
+            <input type="text" required>
+            <span></span>
+            <label>Male/Female</label>
+          </div>
+          <div class="txt_field">
+            <input type="date" required>
+            <span></span>
+            <label></label>
+          </div>
+          <div class="txt_field">
+            <input type="text" required>
+            <span></span>
+            <label>Total Fare</label>
+          </div> -->
+          
+          
 
-        <table>
-            <thead>
+        
+          <input type="submit" value="Make Payment" onclick="validateTicket()" >
+        <div class="signup_link">
+          Copyright 2017-2021
+          
 
-                <tr>
-                    <th>Train Number</th>
-                    <th>Train Name</th>
-                    <th>Source</th>
-                    <th>Destination</th>
-                    <th>Fare</th>
-                    <th>Book Ticket</th>
-                </tr>
+        </div>
+      </form>
+      <script>
+    
+    function getTrainById() {
+                
+      const tno = Number(document.getElementById("2").value);
+            const date = document.getElementById("1").value;
+            const pass = Number(document.getElementById("3").value);
+                const trainNo = tno;
 
-            </thead>
+                async function getTrainData() {
+                    const url = 'http://localhost:9191/api/train/' + trainNo;
+                    console.log(url);
+                    const data = {
+                        method: 'GET',
+                        headers: {
+                            'Accept': 'application/json',
+                        }
+                        
+                    };
+                    const rawResponse = await fetch(url, data);
+                    console.log(rawResponse);
+                    let content = await rawResponse.text();
 
-            <tbody id="table_body">
+                    const jsonObj=JSON.parse(content);
+                    let train_data=jsonObj;
+                    let source=train_data.source;
+                    console.log(source);
+                    
+                    let destination=train_data.destination;
+                    console.log(destination);
+                    let price=train_data.ticketPrice;
+                    
+                    let letter1 = source.charAt(0);
+                    let letter2 = destination.charAt(0);
+                    let pnr= letter1+letter2+"."+date+"100";
+                    console.log(pnr);
+                    let pri= document.getElementById("tcost");
+                    pri.innerHTML=train_data.ticketPrice;
+                    return pnr;
+                   
+              }
+              let pt=getTrainData();
+              return pt;
+      }  
+      function validateTicket() {
 
-            </tbody>
+            // const form = document.getElementById("frm");
 
-        </table>
+            const tno = Number(document.getElementById("2").value);
+            const date = document.getElementById("1").value;
+            const pass = Number(document.getElementById("3").value);
+            let pnr="";
+            // const tname = document.getElementById("2").value;
+            // const source = document.getElementById("3").value;
+            // const dest = document.getElementById("4").value;
+            // const fare = Number(document.getElementById("5").value);
+            console.log(tno);
 
-    </div>
+
+            if (tno == "" || tno.length < 5) {
+                window.alert("Train Number above 5 ");
+                return false;
+            }
+            else if (date == null || date== "") {
+                window.alert("date Name Not Null");
+                return false;
+            }
+            else if (pass == null || pass == 0) {
+                window.alert("passenger number Not Null");
+                return false;
+            }
+            else {
+                const pnrf= String(getTrainById());         
+                const ticketObj = {
+                    "id": null,
+                    "pnr":pnrf,
+                    "trainNo": tno,
+                    "date": date,
+                    "passenger1Id": pass,
+                    "passenger2Id": null,
+                    "passenger3Id": null
+                }
+                async function sendTicketData() {
+                    const url = 'http://localhost:9191/api/ticket';
+
+                    const data = {
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(ticketObj)
+                    };
+                    const rawResponse = await fetch(url, data);
+                    const content = await rawResponse.json();
+
+                    console.log(content);
+                }
+                sendTicketData();
+
+                //   form.submit();
+            }
+        }
+
+    </script>
 
     </div>
 
