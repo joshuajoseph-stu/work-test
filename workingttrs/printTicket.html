@@ -13,7 +13,7 @@
             <td colspan="3">
                 <form>
   
-                    Ticket Number: <input type="text" id="tikno">
+                    Ticket Number: <input type="number" id="tikno">
                     <input type="button" value="Search" class="btn btn-danger" onclick="getData()">
                 </form>
                
@@ -47,19 +47,26 @@
         var totalprice="800";
         'use strict'
         function getData(){
-            const url1= 'http://localhost:9191/api/train/'+ 1;
-            const url2= 'http://localhost:9191/api/ticket/' + 1;
+            const ticketnumber=document.getElementById("tikno").value;
+            console.log(ticketnumber);
+            var url1= 'http://localhost:9191/api/train/';
+            var url2= 'http://localhost:9191/api/ticket/'+ticketnumber;
             async function callApi(){ 
-                let response1 = await fetch(url1);
                 let response2 = await fetch(url2);
-                let jsonStr1= await response1.text();
                 let jsonStr2= await response2.text();
-                jsonObj1=JSON.parse(jsonStr1);
                 jsonObj2=JSON.parse(jsonStr2);
-                const train_data= jsonObj1;
                 const ticket_data= jsonObj2;
-                trainNo=train_data.trainNo;
+                trainNo=ticket_data.trainNo;
                 console.log(trainNo);
+                url1+=trainNo;
+
+                let response1 = await fetch(url1);
+                let jsonStr1= await response1.text();
+                jsonObj1=JSON.parse(jsonStr1);
+                const train_data= jsonObj1;
+
+                
+                
                 from=train_data.source;
                 console.log(from);
                 to=train_data.destination;
