@@ -13,28 +13,116 @@
       <h1>Register</h1>
       <form id="contact-form" method="get" action="">
         <div class="txt_field">
-          <input type="text" required>
+          <input type="text" id="email" required>
           <span></span>
           <label>Email</label>
         </div>
         <div class="txt_field">
-            <input type="text" required>
+            <input type="number" id="phoneno" required>
             <span></span>
             <label>Phone No.</label>
           </div>
+          <div class="txt_field">
+            <input type="text" id="dob" required>
+            <span></span>
+            <label>Date of birth</label>
+          </div>
+          <div class="txt_field">
+            <input type="text" id="gender" required>
+            <span></span>
+            <label>Gender</label>
+          </div>
+          
+          <div class="txt_field">
+            <input type="text" id="name" required>
+            <span></span>
+            <label>Name</label>
+          </div>
 
         <div class="txt_field">
-          <input type="password" required>
+          <input type="password" id="pass" required>
           <span></span>
           <label>Password</label>
         </div>
 
         
-        <input type="submit" value="Signup">
+        <input type="submit" value="Signup" onclick="validateCustomer()" >
         <div class="signup_link">
           Copyright 2017-2021 <a href="#"></a>
         
       </form>
+      <script>
+    
+       function validateCustomer() {
+
+            const form = document.getElementById("frm");
+
+            const dob = document.getElementById("dob").value;
+            const email = document.getElementById("email").value;
+            const gender = document.getElementById("gender").value;
+            const name = document.getElementById("name").value;
+            const password = document.getElementById("pass").value;
+            const phone= Number(document.getElementById("phoneno").value);
+
+
+            if (dob == "" || dob == null) {
+                window.alert("Invalid dob ");
+            }
+            else if (email == null || email == "") {
+                window.alert("Email Should not be null ");
+            }
+            else if (gender == null || gender == "") {
+                window.alert("gender Not Null");
+                return false;
+            }
+            else if (name== null || name == "") {
+                widnow.alert("Name Not Null");
+                return false;
+            }
+            else if (password == null || password == "") {
+                window.alert("password Not Null");
+            }
+            else if(phone ==null || phone==""){
+                window.alert("phone no not null");
+            }
+            else {
+
+                const customerObj = {
+                        "id": null,
+                        "name": name,
+                        "email": email,
+                        "password": password,
+                        "gender": gender,
+                        "dob": dob,
+                        "phone": phone
+                }
+                console.log(name)
+                
+                async function sendCustomerData() {
+                    const url = 'http://localhost:9191/api/signup';
+                    console.log("before stringify");
+                    const data = {
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(customerObj)
+                    };
+                    console.log("done with stringify");
+                    console.log(data);
+                    const rawResponse = await fetch(url, data);
+                    const content = await rawResponse.json();
+
+                    console.log(content);
+                }
+                sendCustomerData();
+
+                //   form.submit();
+            }
+        }
+
+    </script>
     </div>
 
   </body>
