@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Print ticket</title>
+</head>
+<body>
+    <table>
+        <tr><td>Text to Save:</td></tr>
+        <tr>
+            <td colspan="3">
+                <form>
+  
+                    Ticket Number: <input type="number" id="tikno">
+                    <input type="button" value="Search" class="btn btn-danger" onclick="getData()">
+                </form>
+               
+       
+            </td>
+        </tr>
+        <tr>
+            <td>Filename to Save As:</td>
+            <td><input id="inputFileNameToSaveAs"></input></td>
+            <td><button onclick="saveTextAsFile()">Save Text to File</button></td>
+        </tr>
+        <!-- <tr>
+            <td>Select a File to Load:</td>
+            <td><input type="file" id="fileToLoad"></td>
+            <td><button onclick="loadFileAsText()">Load Selected File</button><td>
+        </tr> -->
+    </table>
+     
+
+
+    <script>
+        var pnr;
+        var trainNo;
+        var from;
+        var to;
+        var travelDate;
+        var name="jessica";
+        var gender="f";
+        var age="21";
+        var fare="1000";
+        var totalprice="800";
+        'use strict'
+        function getData(){
+            const ticketnumber=document.getElementById("tikno").value;
+            console.log(ticketnumber);
+            var url1= 'http://localhost:9191/api/train/';
+            var url2= 'http://localhost:9191/api/ticket/'+ticketnumber;
+            async function callApi(){ 
+                let response2 = await fetch(url2);
+                let jsonStr2= await response2.text();
+                jsonObj2=JSON.parse(jsonStr2);
+                const ticket_data= jsonObj2;
+                trainNo=ticket_data.trainNo;
+                console.log(trainNo);
+                url1+=trainNo;
+
+                let response1 = await fetch(url1);
+                let jsonStr1= await response1.text();
+                jsonObj1=JSON.parse(jsonStr1);
+                const train_data= jsonObj1;
+
+                
+                
+                from=train_data.source;
+                console.log(from);
+                to=train_data.destination;
+                travelDate=ticket_data.date;
+                pnr=from.charAt(0)+to.charAt(0)+"."+travelDate+"100";
+                console.log(pnr);
+                }
+            callApi();
+        }
+        'use strict'
+        function saveTextAsFile()
+        {   getData();
+            console.log(pnr);
+            // var textToSave = document.getElementById("inputTextToSave").value;
+                var textToSave = "PNR              :" + pnr + "\nTrain No         :" + trainNo + "\nFrom             :" +
+                                from + "\nTo               :" + to + "\nTravel Date      :" + travelDate + "\nPassenger: \nName: "+ name + "       Age"+ age + "      Gender: "+ gender + "      Fare: " + fare + "\nTotal Price: "+ totalprice ;
+                                console.log(textToSave);
+                var textToSaveAsBlob = new Blob([textToSave], {type:"text/plain"});
+                var textToSaveAsURL = window.URL.createObjectURL(textToSaveAsBlob);
+                var fileNameToSaveAs = document.getElementById("inputFileNameToSaveAs").value;
+            
+                var downloadLink = document.createElement("a");
+                downloadLink.download = fileNameToSaveAs;
+                downloadLink.innerHTML = "Download File";
+                downloadLink.href = textToSaveAsURL;
+                downloadLink.onclick = destroyClickedElement;
+                downloadLink.style.display = "none";
+                document.body.appendChild(downloadLink);
+            
+                downloadLink.click();
+            }
+            'use strict'
+            function destroyClickedElement(event)
+            {
+                document.body.removeChild(event.target);
+            }
+ 
+    </script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="Login.css">
+  </head>
+  <body>
+    <div class= "full-page">
+
+    </div>
+    <div class="center">
+      <h1>Login</h1>
+      <form id="frm" method="get" action="">
+        <div class="txt_field">
+          <input type="text" id="1" name="username" required>
+          <span></span>
+          <label>Email</label>
+        </div>
+        <div class="txt_field">
+          <input type="password" id="2" name="password" required>
+          <span></span>
+          <label>Password</label>
+        </div>
+
+        <div class="pass">Forgot Password?</div>
+        <!-- <input type="submit" value="Login" onclick="validateUser()"> -->
+        <input type="submit" value="Login">
+        <div class="signup_link">
+          Not a member? <a href="signup.html">Signup</a>
+        </div>
+      </form>
+      <!-- <Script>
+        function validateUser(){
+          const form = document.getElementById("frm");
+
+            const username = document.getElementById("1").value;
+            const password = document.getElementById("2").value;
+
+            if( username == "" || username==null){
+              window.alert("Username invalid");
+            }
+            else if( password == null || password ==""){
+              window.alert("password invalid");
+            }
+            else{
+              const userObj = {
+                "username": username,
+                "password":password
+              }
+              async function sendUserData(){
+                const url = 'http://localhost:9191/api/login';
+                const data = {
+                  method: 'POST',
+                  headers: {'Accept':'application/json','Content-Type':'application/json'},
+                  body: JSON.stringify(userObj)
+                };
+                const rawRespone = await fetch(url,data);
+                const content= await rawRespone.json();
+                console.log(content);
+              }
+              sendUserData();
+        }
+      }
+      </script> -->
+    </div>
+
+  </body>
+</html>
