@@ -35,8 +35,21 @@
           <div class="txt_field">
             <input type="text" id="3" required>
             <span></span>
-            <label>Passenger Number</label>
+            <label>Passenger1 Number</label>
           </div>
+          <div class="txt_field">
+            <input type="text" id="4" required>
+            <span></span>
+            <label>Passenger2 Number</label>
+          </div>
+          
+          <div class="txt_field">
+            <input type="text" id="5" required>
+            <span></span>
+            <label>Passenger3 Number</label>
+          </div>
+          
+
           <div><label id="tcost"></label></div>
           <!-- <div class="txt_field">
             <input type="text" required>
@@ -109,7 +122,9 @@
 
             const tno = Number(document.getElementById("2").value);
             const date = document.getElementById("1").value;
-            const pass = Number(document.getElementById("3").value);
+            const pass1 = Number(document.getElementById("3").value);
+            const pass2 = Number(document.getElementById("4").value);
+            const pass3 = Number(document.getElementById("5").value);
             // const tname = document.getElementById("2").value;
             // const source = document.getElementById("3").value;
             // const dest = document.getElementById("4").value;
@@ -125,8 +140,16 @@
                 window.alert("date Name Not Null");
                 return false;
             }
-            else if (pass == null || pass == 0) {
-                window.alert("passenger number Not Null");
+            else if (pass1 == null || pass1 == 0) {
+                window.alert("passenger1 number Not Null");
+                return false;
+            }
+            else if (pass2 == null) {
+                window.alert("passenger2 number Not Null");
+                return false;
+            }
+            else if (pass3 == null) {
+                window.alert("passenger3 number Not Null");
                 return false;
             }
             else {
@@ -136,9 +159,9 @@
                     "pnr":pnr,
                     "trainNo": tno,
                     "date": date,
-                    "passenger1Id": pass,
-                    "passenger2Id": null,
-                    "passenger3Id": null
+                    "passenger1Id": pass1,
+                    "passenger2Id": pass2,
+                    "passenger3Id": pass3
                 }
                 async function sendTicketData() {
                     const url = 'http://localhost:9191/api/ticket';
