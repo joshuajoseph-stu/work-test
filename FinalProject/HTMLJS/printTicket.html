@@ -40,31 +40,68 @@
         var from;
         var to;
         var travelDate;
-        var name="jessica";
-        var gender="f";
-        var age="21";
-        var fare="1000";
-        var totalprice="800";
+        var name1;
+        var gender1;
+        var age1;
+        var fare1;
+        var name2;
+        var gender2;
+        var age2;
+        var fare2;
+        var name3;
+        var gender3;
+        var age3;
+        var fare3;
+
+        var totalprice;
+
         'use strict'
         function getData(){
             const ticketnumber=document.getElementById("tikno").value;
             console.log(ticketnumber);
             var url1= 'http://localhost:9191/api/train/';
+            
             var url2= 'http://localhost:9191/api/ticket/'+ticketnumber;
+            
+            var url3= 'http://localhost:9191/api/customer/';
+            var url4= 'http://localhost:9191/api/customer/';
+            var url5= 'http://localhost:9191/api/customer/';
             async function callApi(){ 
                 let response2 = await fetch(url2);
                 let jsonStr2= await response2.text();
                 jsonObj2=JSON.parse(jsonStr2);
                 const ticket_data= jsonObj2;
                 trainNo=ticket_data.trainNo;
+                passenger1=ticket_data.passenger1Id;
+                passenger2=ticket_data.passenger2Id;
+                passenger3=ticket_data.passenger3Id;
+
                 console.log(trainNo);
                 url1+=trainNo;
+                url3+=passenger1;
+                url4+=passenger2;
+                url5+=passenger3;
+                
 
                 let response1 = await fetch(url1);
                 let jsonStr1= await response1.text();
                 jsonObj1=JSON.parse(jsonStr1);
                 const train_data= jsonObj1;
 
+                let response3 = await fetch(url3);
+                let jsonStr3= await response3.text();
+                jsonObj3=JSON.parse(jsonStr3);
+                const pass1_data= jsonObj3;
+
+                let response4 = await fetch(url4);
+                let jsonStr4= await response4.text();
+                jsonObj4=JSON.parse(jsonStr4);
+                const pass2_data= jsonObj4;
+
+                let response5 = await fetch(url5);
+                let jsonStr5= await response5.text();
+                jsonObj5=JSON.parse(jsonStr5);
+                const pass3_data= jsonObj5;
                 
                 
                 from=train_data.source;
@@ -72,7 +109,49 @@
                 to=train_data.destination;
                 travelDate=ticket_data.date;
                 pnr=from.charAt(0)+to.charAt(0)+"."+travelDate+"100";
-                console.log(pnr);
+                let ticketprice=Number(train_data.ticketPrice);
+                console.log("pnr: ", pnr," ticketprce: ", ticketprice); 
+
+                name1=pass1_data.name;
+                gender1=pass1_data.gender;
+                age1=2022-parseInt((pass1_data.dob).slice(0,4));
+                if(gender1="F"){
+                    fare1=Number(ticketprice*0.75);
+                }
+                if(age1<=12){
+                    fare1=Number(ticketprice*0.5);
+                }
+                else if(age1>=60){
+                    fare1=Number(ticketprice*0.6);
+                }
+
+                name2=pass2_data.name;
+                gender2=pass2_data.gender;
+                age2=2022-parseInt((pass2_data.dob).slice(0,4));
+                if(gender2="F"){
+                    fare2=Number(ticketprice*0.75);
+                }
+                if(age2<=12){
+                    fare2=Number(ticketprice*0.5);
+                }
+                else if(age2>=60){
+                    fare2=Number(ticketprice*0.6);
+                }
+
+                name3=pass3_data.name;
+                gender3=pass3_data.gender;
+                age3=2022-parseInt((pass3_data.dob).slice(0,4));
+                if(gender3="F"){
+                    fare3=Number(ticketprice*0.75);
+                }
+                if(age3<=12){
+                    fare3=Number(ticketprice*0.5);
+                }
+                else if(age3>=60){
+                    fare3=Number(ticketprice*0.6);
+                }
+                
+                console.log(name1,name2,name3,age1);
                 }
             callApi();
         }
@@ -81,12 +160,26 @@
         {   getData();
             console.log(pnr);
             // var textToSave = document.getElementById("inputTextToSave").value;
+                if(name2==undefined & name3==undefined){
+                    totalprice=fare1;
+                    var textToSave = "PNR              :" + pnr + "\nTrain No         :" + trainNo + "\nFrom             :" +
+                                from + "\nTo               :" + to + "\nTravel Date      :" + travelDate + "\n\nPassenger: \nName1: "+ name1 + "       Age1: "+ age1 + "      Gender1: "+ gender1 + "      Fare1: " + fare1 + "\n\nTotal Price: "+ totalprice ;
+                }
+                else if(name3==undefined){
+                    totalprice=fare1+fare2;
+                    var textToSave = "PNR              :" + pnr + "\nTrain No         :" + trainNo + "\nFrom             :" +
+                                from + "\nTo               :" + to + "\nTravel Date      :" + travelDate + "\n\nPassenger: \nName1: "+ name1 + "       Age1: "+ age1 + "      Gender1: "+ gender1 + "      Fare1: " + fare1 + "\nName2: "+ name2 + "       Age2: "+ age2 + "      Gender2: "+ gender2 + "      Fare2: " + fare2 +"\n\nTotal Price: "+ totalprice ;
+                }
+                else{
+                    totalprice=fare1+fare2+fare3;
+            
                 var textToSave = "PNR              :" + pnr + "\nTrain No         :" + trainNo + "\nFrom             :" +
-                                from + "\nTo               :" + to + "\nTravel Date      :" + travelDate + "\nPassenger: \nName: "+ name + "       Age"+ age + "      Gender: "+ gender + "      Fare: " + fare + "\nTotal Price: "+ totalprice ;
+                                from + "\nTo               :" + to + "\nTravel Date      :" + travelDate + "\n\nPassenger: \nName1: "+ name1 + "       Age1: "+ age1 + "      Gender1: "+ gender1 + "      Fare1: " + fare1 + "\nName2: "+ name2 + "       Age2: "+ age2 + "      Gender2: "+ gender2 + "      Fare2: " + fare2 +" \nName3: "+ name3 + "       Age3: "+ age3 + "      Gender3: "+ gender3 + "      Fare3: " + fare3 +"\n\nTotal Price: "+ totalprice ;
+                }
                                 console.log(textToSave);
                 var textToSaveAsBlob = new Blob([textToSave], {type:"text/plain"});
                 var textToSaveAsURL = window.URL.createObjectURL(textToSaveAsBlob);
-                var fileNameToSaveAs = document.getElementById("inputFileNameToSaveAs").value;
+                var fileNameToSaveAs = pnr+document.getElementById("inputFileNameToSaveAs").value;
             
                 var downloadLink = document.createElement("a");
                 downloadLink.download = fileNameToSaveAs;
