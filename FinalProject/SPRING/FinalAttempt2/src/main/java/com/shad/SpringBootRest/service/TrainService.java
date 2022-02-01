@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
 import com.shad.SpringBootRest.entity.Train;
 import com.shad.SpringBootRest.repository.TrainRepository;
 
@@ -32,7 +33,10 @@ public class TrainService {
 
 	public Optional<Train> getTrainById(int trainId) {
 	return	trainRepository.findById(trainId);
-
+	}
+	
+	public Optional<List<Train>> getTrains(String source, String destination) {
+		return trainRepository.findBySourceAndDestination(source, destination);
 	}
 
 	public List<Train> getAllTrains() {

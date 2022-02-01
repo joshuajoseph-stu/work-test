@@ -48,6 +48,19 @@ public class TrainController {
 		return trainService.getTrainById(trainId);
 
 	}
+	
+	@GetMapping("/train/find/{source}/{destination}")
+	public Optional<List<Train>> findTrainbySouceAndDestination(@PathVariable String source,@PathVariable String destination) {
+
+		Optional<List<Train>> optional = trainService.getTrains(source, destination);
+
+		if (optional.isEmpty()) {
+			return null;
+		} else {
+
+			return optional;
+		}
+	}
 
 	@GetMapping("/train")
 	public List<Train> getAllTrains() {

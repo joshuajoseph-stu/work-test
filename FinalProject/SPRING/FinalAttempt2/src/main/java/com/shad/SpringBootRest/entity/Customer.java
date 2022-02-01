@@ -16,16 +16,7 @@ public class Customer {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public Customer(int id, String name, String email, String password, String gender, String dob, String phone) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.email = email;
-		this.password = password;
-		this.gender = gender;
-		this.dob = dob;
-		this.phone = phone;
-	}
+	
 
 	private String name;
 	private String email;
@@ -87,6 +78,16 @@ public class Customer {
 	}
 
 	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+	public Customer(int id, String name, String email, String password, String gender, String dob, String phone) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.email = email;
+		this.password = password;
+		this.gender = gender;
+		this.dob = dob;
 		this.phone = phone;
 	}
 
