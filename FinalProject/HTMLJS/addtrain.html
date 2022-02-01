@@ -124,6 +124,8 @@
                         },
                         body: JSON.stringify(trainObj)
                     };
+                    console.log("done with stringify");
+                    console.log(data);
                     const rawResponse = await fetch(url, data);
                     const content = await rawResponse.json();
 

@@ -10,7 +10,7 @@ import com.shad.SpringBootRest.entity.Customer;
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Integer> {
 
-	//SELECT * FROM customer WHERE email=? AND password=?
+	
 	Optional<Customer> findByEmailAndPassword(String email, String password);
 
 }

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,20 +29,20 @@ public class CustomerController {
 	}
 	
 	@PostMapping("/signup")
-	public Customer saveCustomer(Customer customer) {
+	public Customer saveCustomer(@RequestBody Customer customer) {
 		return customerService.saveCustomer(customer);
 	}
 
-	@PostMapping("/login")
-	public String doLogin(String email, String password) {
+	@PostMapping("/login/{email}/{password}")
+	public Optional<Customer> doLogin(@PathVariable String email,@PathVariable String password) {
 
-		Optional<Customer> optonal = customerService.getCustomer(email, password);
+		Optional<Customer> optional = customerService.getCustomer(email, password);
 
-		if (optonal.isEmpty()) {
-			return "Failure";
+		if (optional.isEmpty()) {
+			return null;
 		} else {
 
-			return "Success";
+			return optional;
 		}
 	}
 	
