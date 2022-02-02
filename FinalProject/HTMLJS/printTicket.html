@@ -1,286 +1,440 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Print ticket</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css" />
     <!-- jsPDF library -->
     <script src="https://unpkg.com/pdf-lib@1.4.0"></script>
     <script src="https://unpkg.com/downloadjs@1.4.7"></script>
 
     <style>
-        h1,h2,h3 {
-    width:auto;
-    margin: 0 auto;
-    
-    color: whitesmoke;
-}
+      h1,
+      h2,
+      h3 {
+        width: auto;
+        margin: 0 auto;
 
+        color: whitesmoke;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="full-page">
-    <div class="container">
-        <center><table>
-        ><tr><td><h1>Text to Save:</h1></td></tr>
-        <tr>
-            <td>
+      <div class="container">
+        <center>
+          <table>
+            >
+            <tr>
+              <td><h1>Text to Save:</h1></td>
+            </tr>
+            <tr>
+              <td>
                 <form>
-  
-                   <h2> Ticket Number: </h2><input type="number" id="tikno">
-                    <input type="button" value="Search" class="btn btn-danger" onclick="getData()">
+                  <h2>Ticket Number:</h2>
+                  <input type="number" id="tikno" />
+                  <input
+                    type="button"
+                    value="Search"
+                    class="btn btn-danger"
+                    onclick="getData()"
+                  />
                 </form>
-               
-       
-            </td>
-        </tr>
-        <tr>
-            <td><h3>File to Save As:</h3></td>
-            <!-- <td><input id="inputFileNameToSaveAs"></input></td> -->
-            <td><button onclick="saveTextAsFile()">Save Text to Txt File</button></td>
-            <td><button onclick="createPdf()">Save Text to PDF File</button></td>
-        </tr>
-        <!-- <tr>
+              </td>
+            </tr>
+            <tr>
+              <td><h3>File to Save As:</h3></td>
+              <!-- <td><input id="inputFileNameToSaveAs"></input></td> -->
+              <td>
+                <button onclick="saveTextAsFile()">
+                  Save Text to Txt File
+                </button>
+              </td>
+              <td>
+                <button onclick="createPdf()">Save Text to PDF File</button>
+              </td>
+            </tr>
+            <!-- <tr>
             <td>Select a File to Load:</td>
             <td><input type="file" id="fileToLoad"></td>
             <td><button onclick="loadFileAsText()">Load Selected File</button><td>
         </tr> -->
-    
-    </table>
-</center>
+          </table>
+        </center>
+      </div>
     </div>
-</div>
-     
-
 
     <script>
-        const { PDFDocument, StandardFonts, rgb } = PDFLib;
+      const { PDFDocument, StandardFonts, rgb } = PDFLib;
 
-        var pnr;
-        var trainNo;
-        var from;
-        var to;
-        var travelDate;
-        var name1;
-        var gender1;
-        var age1;
-        var fare1;
-        var name2;
-        var gender2;
-        var age2;
-        var fare2;
-        var name3;
-        var gender3;
-        var age3;
-        var fare3;
+      var pnr;
+      var trainNo;
+      var from;
+      var to;
+      var travelDate;
+      var name1;
+      var gender1;
+      var age1;
+      var fare1;
+      var name2;
+      var gender2;
+      var age2;
+      var fare2;
+      var name3;
+      var gender3;
+      var age3;
+      var fare3;
 
-        var totalprice;
+      var totalprice;
 
-        
+      ("use strict");
+      function getData() {
+        const ticketnumber = document.getElementById("tikno").value;
+        console.log(ticketnumber);
+        var url1 = "http://localhost:9191/api/train/";
 
-        'use strict'
-        function getData(){
-            const ticketnumber=document.getElementById("tikno").value;
-            console.log(ticketnumber);
-            var url1= 'http://localhost:9191/api/train/';
-            
-            var url2= 'http://localhost:9191/api/ticket/'+ticketnumber;
-            
-            var url3= 'http://localhost:9191/api/customer/';
-            var url4= 'http://localhost:9191/api/customer/';
-            var url5= 'http://localhost:9191/api/customer/';
-            async function callApi(){ 
-                let response2 = await fetch(url2);
-                let jsonStr2= await response2.text();
-                jsonObj2=JSON.parse(jsonStr2);
-                const ticket_data= jsonObj2;
-                trainNo=ticket_data.trainNo;
-                passenger1=ticket_data.passenger1Id;
-                passenger2=ticket_data.passenger2Id;
-                passenger3=ticket_data.passenger3Id;
+        var url2 = "http://localhost:9191/api/ticket/" + ticketnumber;
 
-                console.log(trainNo);
-                url1+=trainNo;
-                url3+=passenger1;
-                url4+=passenger2;
-                url5+=passenger3;
-                
+        var url3 = "http://localhost:9191/api/customer/";
+        var url4 = "http://localhost:9191/api/customer/";
+        var url5 = "http://localhost:9191/api/customer/";
+        async function callApi() {
+          let response2 = await fetch(url2);
+          let jsonStr2 = await response2.text();
+          jsonObj2 = JSON.parse(jsonStr2);
+          const ticket_data = jsonObj2;
+          trainNo = ticket_data.trainNo;
+          passenger1 = ticket_data.passenger1Id;
+          passenger2 = ticket_data.passenger2Id;
+          passenger3 = ticket_data.passenger3Id;
 
-                let response1 = await fetch(url1);
-                let jsonStr1= await response1.text();
-                jsonObj1=JSON.parse(jsonStr1);
-                const train_data= jsonObj1;
+          console.log(trainNo);
+          url1 += trainNo;
+          url3 += passenger1;
+          url4 += passenger2;
+          url5 += passenger3;
 
-                let response3 = await fetch(url3);
-                let jsonStr3= await response3.text();
-                jsonObj3=JSON.parse(jsonStr3);
-                const pass1_data= jsonObj3;
+          let response1 = await fetch(url1);
+          let jsonStr1 = await response1.text();
+          jsonObj1 = JSON.parse(jsonStr1);
+          const train_data = jsonObj1;
 
-                let response4 = await fetch(url4);
-                let jsonStr4= await response4.text();
-                jsonObj4=JSON.parse(jsonStr4);
-                const pass2_data= jsonObj4;
+          let response3 = await fetch(url3);
+          let jsonStr3 = await response3.text();
+          jsonObj3 = JSON.parse(jsonStr3);
+          const pass1_data = jsonObj3;
 
-                let response5 = await fetch(url5);
-                let jsonStr5= await response5.text();
-                jsonObj5=JSON.parse(jsonStr5);
-                const pass3_data= jsonObj5;
-                
-                
-                from=train_data.source;
-                console.log(from);
-                to=train_data.destination;
-                travelDate=ticket_data.date;
-                pnr=from.charAt(0)+to.charAt(0)+travelDate+"100";
-                let ticketprice=Number(train_data.ticketPrice);
-                console.log("pnr: ", pnr," ticketprce: ", ticketprice); 
+          let response4 = await fetch(url4);
+          let jsonStr4 = await response4.text();
+          jsonObj4 = JSON.parse(jsonStr4);
+          const pass2_data = jsonObj4;
 
-                name1=pass1_data.name;
-                gender1=pass1_data.gender;
-                age1=2022-parseInt((pass1_data.dob).slice(0,4));
-                if(gender1="F"){
-                    fare1=Number(ticketprice*0.75);
-                }
-                if(age1<=12){
-                    fare1=Number(ticketprice*0.5);
-                }
-                else if(age1>=60){
-                    fare1=Number(ticketprice*0.6);
-                }
+          let response5 = await fetch(url5);
+          let jsonStr5 = await response5.text();
+          jsonObj5 = JSON.parse(jsonStr5);
+          const pass3_data = jsonObj5;
 
-                name2=pass2_data.name;
-                gender2=pass2_data.gender;
-                age2=2022-parseInt((pass2_data.dob).slice(0,4));
-                if(gender2="F"){
-                    fare2=Number(ticketprice*0.75);
-                }
-                if(age2<=12){
-                    fare2=Number(ticketprice*0.5);
-                }
-                else if(age2>=60){
-                    fare2=Number(ticketprice*0.6);
-                }
+          from = train_data.source;
+          console.log(from);
+          to = train_data.destination;
+          travelDate = ticket_data.date;
+          pnr = from.charAt(0) + to.charAt(0) + travelDate + "100";
+          let ticketprice = Number(train_data.ticketPrice);
+          console.log("pnr: ", pnr, " ticketprce: ", ticketprice);
 
-                name3=pass3_data.name;
-                gender3=pass3_data.gender;
-                age3=2022-parseInt((pass3_data.dob).slice(0,4));
-                if(gender3="F"){
-                    fare3=Number(ticketprice*0.75);
-                }
-                if(age3<=12){
-                    fare3=Number(ticketprice*0.5);
-                }
-                else if(age3>=60){
-                    fare3=Number(ticketprice*0.6);
-                }
-                
-                console.log(name1,name2,name3,age1);
-                }
-            callApi();
+          name1 = pass1_data.name;
+          gender1 = pass1_data.gender;
+          age1 = 2022 - parseInt(pass1_data.dob.slice(0, 4));
+          if ((gender1 = "F")) {
+            fare1 = Number(ticketprice * 0.75);
+          }
+          if (age1 <= 12) {
+            fare1 = Number(ticketprice * 0.5);
+          } else if (age1 >= 60) {
+            fare1 = Number(ticketprice * 0.6);
+          }
+
+          name2 = pass2_data.name;
+          gender2 = pass2_data.gender;
+          age2 = 2022 - parseInt(pass2_data.dob.slice(0, 4));
+          if ((gender2 = "F")) {
+            fare2 = Number(ticketprice * 0.75);
+          }
+          if (age2 <= 12) {
+            fare2 = Number(ticketprice * 0.5);
+          } else if (age2 >= 60) {
+            fare2 = Number(ticketprice * 0.6);
+          }
+
+          name3 = pass3_data.name;
+          gender3 = pass3_data.gender;
+          age3 = 2022 - parseInt(pass3_data.dob.slice(0, 4));
+          if ((gender3 = "F")) {
+            fare3 = Number(ticketprice * 0.75);
+          }
+          if (age3 <= 12) {
+            fare3 = Number(ticketprice * 0.5);
+          } else if (age3 >= 60) {
+            fare3 = Number(ticketprice * 0.6);
+          }
+
+          console.log(name1, name2, name3, age1);
         }
-        'use strict'
-        function saveTextAsFile()
-        {   getData();
-            console.log(pnr);
-            // var textToSave = document.getElementById("inputTextToSave").value;
-                if(name2==undefined & name3==undefined){
-                    totalprice=fare1;
-                    var textToSave = "PNR              :" + pnr + "\nTrain No         :" + trainNo + "\nFrom             :" +
-                                from + "\nTo               :" + to + "\nTravel Date      :" + travelDate + "\n\nPassenger: \nName1: "+ name1 + "       Age1: "+ age1 + "      Gender1: "+ gender1 + "      Fare1: " + fare1 + "\n\nTotal Price: "+ totalprice ;
-                }
-                else if(name3==undefined){
-                    totalprice=fare1+fare2;
-                    var textToSave = "PNR              :" + pnr + "\nTrain No         :" + trainNo + "\nFrom             :" +
-                                from + "\nTo               :" + to + "\nTravel Date      :" + travelDate + "\n\nPassenger: \nName1: "+ name1 + "       Age1: "+ age1 + "      Gender1: "+ gender1 + "      Fare1: " + fare1 + "\nName2: "+ name2 + "       Age2: "+ age2 + "      Gender2: "+ gender2 + "      Fare2: " + fare2 +"\n\nTotal Price: "+ totalprice ;
-                }
-                else{
-                    totalprice=fare1+fare2+fare3;
-            
-                var textToSave = "PNR              :" + pnr + "\nTrain No         :" + trainNo + "\nFrom             :" +
-                                from + "\nTo               :" + to + "\nTravel Date      :" + travelDate + "\n\nPassenger: \nName1: "+ name1 + "       Age1: "+ age1 + "      Gender1: "+ gender1 + "      Fare1: " + fare1 + "\nName2: "+ name2 + "       Age2: "+ age2 + "      Gender2: "+ gender2 + "      Fare2: " + fare2 +" \nName3: "+ name3 + "       Age3: "+ age3 + "      Gender3: "+ gender3 + "      Fare3: " + fare3 +"\n\nTotal Price: "+ totalprice ;
-                }
-                                console.log(textToSave);
+        callApi();
+      }
+      ("use strict");
+      function saveTextAsFile() {
+        getData();
+        console.log(pnr);
+        // var textToSave = document.getElementById("inputTextToSave").value;
+        if ((name2 == undefined) & (name3 == undefined)) {
+          totalprice = fare1;
+          var textToSave =
+            "PNR              :" +
+            pnr +
+            "\nTrain No         :" +
+            trainNo +
+            "\nFrom             :" +
+            from +
+            "\nTo               :" +
+            to +
+            "\nTravel Date      :" +
+            travelDate +
+            "\n\nPassenger: \nName1: " +
+            name1 +
+            "       Age1: " +
+            age1 +
+            "      Gender1: " +
+            gender1 +
+            "      Fare1: " +
+            fare1 +
+            "\n\nTotal Price: " +
+            totalprice;
+        } else if (name3 == undefined) {
+          totalprice = fare1 + fare2;
+          var textToSave =
+            "PNR              :" +
+            pnr +
+            "\nTrain No         :" +
+            trainNo +
+            "\nFrom             :" +
+            from +
+            "\nTo               :" +
+            to +
+            "\nTravel Date      :" +
+            travelDate +
+            "\n\nPassenger: \nName1: " +
+            name1 +
+            "       Age1: " +
+            age1 +
+            "      Gender1: " +
+            gender1 +
+            "      Fare1: " +
+            fare1 +
+            "\nName2: " +
+            name2 +
+            "       Age2: " +
+            age2 +
+            "      Gender2: " +
+            gender2 +
+            "      Fare2: " +
+            fare2 +
+            "\n\nTotal Price: " +
+            totalprice;
+        } else {
+          totalprice = fare1 + fare2 + fare3;
 
-                                   
-                var textToSaveAsBlob = new Blob([textToSave], {type:"text/plain"});
-                var textToSaveAsURL = window.URL.createObjectURL(textToSaveAsBlob);
-                var fileNameToSaveAs = pnr;
+          var textToSave =
+            "PNR              :" +
+            pnr +
+            "\nTrain No         :" +
+            trainNo +
+            "\nFrom             :" +
+            from +
+            "\nTo               :" +
+            to +
+            "\nTravel Date      :" +
+            travelDate +
+            "\n\nPassenger: \nName1: " +
+            name1 +
+            "       Age1: " +
+            age1 +
+            "      Gender1: " +
+            gender1 +
+            "      Fare1: " +
+            fare1 +
+            "\nName2: " +
+            name2 +
+            "       Age2: " +
+            age2 +
+            "      Gender2: " +
+            gender2 +
+            "      Fare2: " +
+            fare2 +
+            " \nName3: " +
+            name3 +
+            "       Age3: " +
+            age3 +
+            "      Gender3: " +
+            gender3 +
+            "      Fare3: " +
+            fare3 +
+            "\n\nTotal Price: " +
+            totalprice;
+        }
+        console.log(textToSave);
 
-                // Document doc = new Document();
-                // Page page = doc.getPages().add();
-                // HtmlFragment htmlFragment = new HtmlFragment("<h1>HTML String</h1>");
-                // page.getParagraphs().add(htmlFragment);
-                // doc.save(dataDir + "HTMLStringUsingDOM.pdf");
+        var textToSaveAsBlob = new Blob([textToSave], { type: "text/plain" });
+        var textToSaveAsURL = window.URL.createObjectURL(textToSaveAsBlob);
+        var fileNameToSaveAs = pnr;
 
-               
+        // Document doc = new Document();
+        // Page page = doc.getPages().add();
+        // HtmlFragment htmlFragment = new HtmlFragment("<h1>HTML String</h1>");
+        // page.getParagraphs().add(htmlFragment);
+        // doc.save(dataDir + "HTMLStringUsingDOM.pdf");
 
-            
-                var downloadLink = document.createElement("a");
-                downloadLink.download = fileNameToSaveAs;
-                downloadLink.innerHTML = "Download File";
-                downloadLink.href = textToSaveAsURL;
-                downloadLink.onclick = destroyClickedElement;
-                downloadLink.style.display = "none";
-                document.body.appendChild(downloadLink);
-            
-                downloadLink.click();
-            }
-            'use strict'
-            function destroyClickedElement(event)
-            {
-                document.body.removeChild(event.target);
-            }
+        var downloadLink = document.createElement("a");
+        downloadLink.download = fileNameToSaveAs;
+        downloadLink.innerHTML = "Download File";
+        downloadLink.href = textToSaveAsURL;
+        downloadLink.onclick = destroyClickedElement;
+        downloadLink.style.display = "none";
+        document.body.appendChild(downloadLink);
 
-            async function createPdf() {
-                // Create a new PDFDocument
-                const pdfDoc = await PDFDocument.create()
-                // Embed the Times Roman font
-                const timesRomanFont = await pdfDoc.embedFont(StandardFonts.TimesRoman)
-                // Add a blank page to the document
-                const page = pdfDoc.addPage()
-                 // Get the width and height of the page
-                const { width, height } = page.getSize()
-                // Draw a string of text toward the top of the page
-                const fontSize = 20
-                
-                if(name2==undefined & name3==undefined){
-                    totalprice=fare1;
-                    var textToSave = "PNR              :" + pnr + "\nTrain No         :" + trainNo + "\nFrom             :" +
-                                from + "\nTo               :" + to + "\nTravel Date      :" + travelDate + "\n\nPassenger: \nName1: "+ name1 + "       Age1: "+ age1 + "      Gender1: "+ gender1 + "      Fare1: " + fare1 + "\n\nTotal Price: "+ totalprice ;
-                }
-                else if(name3==undefined){
-                    totalprice=fare1+fare2;
-                    var textToSave = "PNR              :" + pnr + "\nTrain No         :" + trainNo + "\nFrom             :" +
-                                from + "\nTo               :" + to + "\nTravel Date      :" + travelDate + "\n\nPassenger: \nName1: "+ name1 + "       Age1: "+ age1 + "      Gender1: "+ gender1 + "      Fare1: " + fare1 + "\nName2: "+ name2 + "       Age2: "+ age2 + "      Gender2: "+ gender2 + "      Fare2: " + fare2 +"\n\nTotal Price: "+ totalprice ;
-                }
-                else{
-                    totalprice=fare1+fare2+fare3;
-            
-                var textToSave = "PNR              :" + pnr + "\nTrain No         :" + trainNo + "\nFrom             :" +
-                                from + "\nTo               :" + to + "\nTravel Date      :" + travelDate + "\n\nPassenger: \nName1: "+ name1 + "       Age1: "+ age1 + "      Gender1: "+ gender1 + "      Fare1: " + fare1 + "\nName2: "+ name2 + "       Age2: "+ age2 + "      Gender2: "+ gender2 + "      Fare2: " + fare2 +" \nName3: "+ name3 + "       Age3: "+ age3 + "      Gender3: "+ gender3 + "      Fare3: " + fare3 +"\n\nTotal Price: "+ totalprice ;
-                }
-                                console.log(textToSave);
+        downloadLink.click();
+      }
+      ("use strict");
+      function destroyClickedElement(event) {
+        document.body.removeChild(event.target);
+      }
 
-                var PDtextToSave = textToSave;
-                page.drawText(PDtextToSave, {
-                    x: 50,
-                    y: height - 4 * fontSize,
-                    size: fontSize,
-                    font: timesRomanFont,
-                
-                })
+      async function createPdf() {
+        // Create a new PDFDocument
+        const pdfDoc = await PDFDocument.create();
+        // Embed the Times Roman font
+        const timesRomanFont = await pdfDoc.embedFont(StandardFonts.TimesRoman);
+        // Add a blank page to the document
+        const page = pdfDoc.addPage();
+        // Get the width and height of the page
+        const { width, height } = page.getSize();
+        // Draw a string of text toward the top of the page
+        const fontSize = 20;
 
-                // Serialize the PDFDocument to bytes (a Uint8Array)
-                const pdfBytes = await pdfDoc.save()
+        if ((name2 == undefined) & (name3 == undefined)) {
+          totalprice = fare1;
+          var textToSave =
+            "PNR              :" +
+            pnr +
+            "\nTrain No         :" +
+            trainNo +
+            "\nFrom             :" +
+            from +
+            "\nTo               :" +
+            to +
+            "\nTravel Date      :" +
+            travelDate +
+            "\n\nPassenger: \nName1: " +
+            name1 +
+            "       Age1: " +
+            age1 +
+            "      Gender1: " +
+            gender1 +
+            "      Fare1: " +
+            fare1 +
+            "\n\nTotal Price: " +
+            totalprice;
+        } else if (name3 == undefined) {
+          totalprice = fare1 + fare2;
+          var textToSave =
+            "PNR              :" +
+            pnr +
+            "\nTrain No         :" +
+            trainNo +
+            "\nFrom             :" +
+            from +
+            "\nTo               :" +
+            to +
+            "\nTravel Date      :" +
+            travelDate +
+            "\n\nPassenger: \nName1: " +
+            name1 +
+            "       Age1: " +
+            age1 +
+            "      Gender1: " +
+            gender1 +
+            "      Fare1: " +
+            fare1 +
+            "\nName2: " +
+            name2 +
+            "       Age2: " +
+            age2 +
+            "      Gender2: " +
+            gender2 +
+            "      Fare2: " +
+            fare2 +
+            "\n\nTotal Price: " +
+            totalprice;
+        } else {
+          totalprice = fare1 + fare2 + fare3;
 
-                        // Trigger the browser to download the PDF document
-                        var fileNameToSaveAs = pnr;
-                download(pdfBytes, fileNameToSaveAs, "application/pdf");
-                }
+          var textToSave =
+            "PNR              :" +
+            pnr +
+            "\nTrain No         :" +
+            trainNo +
+            "\nFrom             :" +
+            from +
+            "\nTo               :" +
+            to +
+            "\nTravel Date      :" +
+            travelDate +
+            "\n\nPassenger: \nName1: " +
+            name1 +
+            "       Age1: " +
+            age1 +
+            "      Gender1: " +
+            gender1 +
+            "      Fare1: " +
+            fare1 +
+            "\nName2: " +
+            name2 +
+            "       Age2: " +
+            age2 +
+            "      Gender2: " +
+            gender2 +
+            "      Fare2: " +
+            fare2 +
+            " \nName3: " +
+            name3 +
+            "       Age3: " +
+            age3 +
+            "      Gender3: " +
+            gender3 +
+            "      Fare3: " +
+            fare3 +
+            "\n\nTotal Price: " +
+            totalprice;
+        }
+        console.log(textToSave);
 
- 
+        var PDtextToSave = textToSave;
+        page.drawText(PDtextToSave, {
+          x: 50,
+          y: height - 4 * fontSize,
+          size: fontSize,
+          font: timesRomanFont,
+        });
+
+        // Serialize the PDFDocument to bytes (a Uint8Array)
+        const pdfBytes = await pdfDoc.save();
+
+        // Trigger the browser to download the PDF document
+        var fileNameToSaveAs = pnr;
+        download(pdfBytes, fileNameToSaveAs, "application/pdf");
+      }
     </script>
-</body>
+  </body>
 </html>
