@@ -1,48 +1,38 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
     <title>All Train</title>
     <script src="getTrainData.js"></script>
-    <link rel="stylesheet" href="addtrain.css">
+    <link rel="stylesheet" href="addtrain.css" />
   </head>
   <body>
-    <div class= "full-page">
+    <div class="full-page"></div>
 
-    </div>
-    
     <style>
-      [onclick] { cursor: pointer; }
-  </style>
-  
+      [onclick] {
+        cursor: pointer;
+      }
+    </style>
+
     <div class="center">
-      <h1>All Trains details
-      </h1>
+      <h1>All Trains details</h1>
       <div id="train_details" class="container">
-
         <table>
-            <thead>
+          <thead>
+            <tr onclick="window.location='BookTicket.html';">
+              <th>Train Number</th>
+              <th>Train Name</th>
+              <th>Source</th>
+              <th>Destination</th>
+              <th>Fare</th>
+              <th>Book Ticket</th>
+            </tr>
+          </thead>
 
-                <tr onclick="window.location='BookTicket.html';">
-                    <th>Train Number</th>
-                    <th>Train Name</th>
-                    <th>Source</th>
-                    <th>Destination</th>
-                    <th>Fare</th>
-                    <th>Book Ticket</th>
-                </tr>
-
-            </thead>
-
-            <tbody id="table_body">
-
-            </tbody>
-
+          <tbody id="table_body"></tbody>
         </table>
-
+      </div>
     </div>
-
-    </div>
-
   </body>
 </html>

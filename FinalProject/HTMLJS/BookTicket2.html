@@ -1,14 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
     <title>Book Ticket</title>
-    <link rel="stylesheet" href="BookTicket.css">
+    <link rel="stylesheet" href="BookTicket.css" />
   </head>
   <body>
-    <div class= "full-page">
-
-    </div>
+    <div class="full-page"></div>
     <div class="center">
       <h1>Book Ticket</h1>
       <form id="contact-form" method="get" action="">
@@ -18,26 +16,26 @@
           <label>Name</label>
         </div> -->
         <div class="txt_field">
-          <input type="text" required>
+          <input type="text" required />
           <span></span>
           <label>Name</label>
         </div>
         <div class="txt_field">
-          <input type="text" id="1" required>
+          <input type="text" id="1" required />
           <span></span>
           <label>Date</label>
         </div>
         <div class="txt_field">
-            <input type="text" id="2" required>
-            <span></span>
-            <label>Train Number</label>
-          </div>
-          <div class="txt_field">
-            <input type="text" id="3" required>
-            <span></span>
-            <label>Passenger1 Number</label>
-          </div>
-          <!-- <div class="txt_field">
+          <input type="text" id="2" required />
+          <span></span>
+          <label>Train Number</label>
+        </div>
+        <div class="txt_field">
+          <input type="text" id="3" required />
+          <span></span>
+          <label>Passenger1 Number</label>
+        </div>
+        <!-- <div class="txt_field">
             <input type="text" id="4" required>
             <span></span>
             <label>Passenger2 Number</label>
@@ -47,8 +45,8 @@
             <span></span>
             <label>Passenger3 Number</label>
           </div> -->
-          <div><label id="tcost"></label></div>
-          <!-- <div class="txt_field">
+        <div><label id="tcost"></label></div>
+        <!-- <div class="txt_field">
             <input type="text" required>
             <span></span>
             <label>Male/Female</label>
@@ -63,122 +61,104 @@
             <span></span>
             <label>Total Fare</label>
           </div> -->
-          
-          
 
-        
-          <input type="submit" value="Make Payment" onclick="validateTicket()" >
-        <div class="signup_link">
-          Copyright 2017-2021
-          
-
-        </div>
+        <input type="submit" value="Make Payment" onclick="validateTicket()" />
+        <div class="signup_link">Copyright 2017-2021</div>
       </form>
       <script>
         let pnr = null;
-    
-    async function getTrainById() {
-                
-      const tno = Number(document.getElementById("2").value);
-      const date = document.getElementById("1").value;
-      const trainNo = tno;
 
-      const url = 'http://localhost:9191/api/train/' + trainNo;
-      console.log(url);
-      const data = {
-          method: 'GET',
-          headers: {
-              'Accept': 'application/json',
-          }
-          
-      };
-      const rawResponse = await fetch(url, data);
-      console.log(rawResponse);
-      let content = await rawResponse.text();
-      console.log(content);
+        async function getTrainById() {
+          const tno = Number(document.getElementById("2").value);
+          const date = document.getElementById("1").value;
+          const trainNo = tno;
 
-      const jsonObj= JSON.parse(content);
-      let train_data=jsonObj;
-      let source=train_data.source;
-      console.log(source);
-      
-      let destination=train_data.destination;
-      console.log(destination);
-      let price=train_data.ticketPrice;
-      
-      let letter1 = source.charAt(0);
-      let letter2 = destination.charAt(0);
-      pnr= letter1+letter2+"."+date+"100";
-      console.log(pnr);
-      let pri= document.getElementById("tcost");
-      pri.innerHTML=train_data.ticketPrice;
-              
-      }  
-      async function validateTicket() {
+          const url = "http://localhost:9191/api/train/" + trainNo;
+          console.log(url);
+          const data = {
+            method: "GET",
+            headers: {
+              Accept: "application/json",
+            },
+          };
+          const rawResponse = await fetch(url, data);
+          console.log(rawResponse);
+          let content = await rawResponse.text();
+          console.log(content);
 
-            // const form = document.getElementById("frm");
+          const jsonObj = JSON.parse(content);
+          let train_data = jsonObj;
+          let source = train_data.source;
+          console.log(source);
 
-            const tno = Number(document.getElementById("2").value);
-            const date = document.getElementById("1").value;
-            const pass1 = Number(document.getElementById("3").value);
-            // const pass2 = Number(document.getElementById("4").value);
-            // const pass3 = Number(document.getElementById("5").value);
-            // const tname = document.getElementById("2").value;
-            // const source = document.getElementById("3").value;
-            // const dest = document.getElementById("4").value;
-            // const fare = Number(document.getElementById("5").value);
-            console.log(tno);
+          let destination = train_data.destination;
+          console.log(destination);
+          let price = train_data.ticketPrice;
 
-
-            if (tno == "" || tno.length < 5) {
-                window.alert("Train Number above 5 ");
-                return false;
-            }
-            else if (date == null || date== "") {
-                window.alert("date Name Not Null");
-                return false;
-            }
-            else if (pass1 == null || pass1 == 0 ) {
-            // || pass2 == null || pass2 == 0 || pass3 == null || pass3 == 0) {
-                window.alert("passenger number Not Null");
-                return false;
-            }
-            else {
-                await getTrainById();
-                const ticketObj = {
-                    "id": null,
-                    "pnr":pnr,
-                    "trainNo": tno,
-                    "date": date,
-                    "passenger1Id": pass1,
-                    "passenger2Id": null,
-                    "passenger3Id": null
-                }
-                async function sendTicketData() {
-                    const url = 'http://localhost:9191/api/ticket';
-
-                    const data = {
-                        method: 'POST',
-                        headers: {
-                            'Accept': 'application/json',
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(ticketObj)
-                    };
-                    const rawResponse = await fetch(url, data);
-                    const content = await rawResponse.json();
-
-                    console.log(content);
-                }
-                sendTicketData();
-
-                //   form.submit();
-            }
+          let letter1 = source.charAt(0);
+          let letter2 = destination.charAt(0);
+          pnr = letter1 + letter2 + "." + date + "100";
+          console.log(pnr);
+          let pri = document.getElementById("tcost");
+          pri.innerHTML = train_data.ticketPrice;
         }
+        async function validateTicket() {
+          // const form = document.getElementById("frm");
 
-    </script>
+          const tno = Number(document.getElementById("2").value);
+          const date = document.getElementById("1").value;
+          const pass1 = Number(document.getElementById("3").value);
+          // const pass2 = Number(document.getElementById("4").value);
+          // const pass3 = Number(document.getElementById("5").value);
+          // const tname = document.getElementById("2").value;
+          // const source = document.getElementById("3").value;
+          // const dest = document.getElementById("4").value;
+          // const fare = Number(document.getElementById("5").value);
+          console.log(tno);
 
+          if (tno == "" || tno.length < 5) {
+            window.alert("Train Number above 5 ");
+            return false;
+          } else if (date == null || date == "") {
+            window.alert("date Name Not Null");
+            return false;
+          } else if (pass1 == null || pass1 == 0) {
+            // || pass2 == null || pass2 == 0 || pass3 == null || pass3 == 0) {
+            window.alert("passenger number Not Null");
+            return false;
+          } else {
+            await getTrainById();
+            const ticketObj = {
+              id: null,
+              pnr: pnr,
+              trainNo: tno,
+              date: date,
+              passenger1Id: pass1,
+              passenger2Id: null,
+              passenger3Id: null,
+            };
+            async function sendTicketData() {
+              const url = "http://localhost:9191/api/ticket";
+
+              const data = {
+                method: "POST",
+                headers: {
+                  Accept: "application/json",
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(ticketObj),
+              };
+              const rawResponse = await fetch(url, data);
+              const content = await rawResponse.json();
+
+              console.log(content);
+            }
+            sendTicketData();
+
+            //   form.submit();
+          }
+        }
+      </script>
     </div>
-
   </body>
 </html>
