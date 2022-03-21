@@ -1,0 +1,16 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">	
+
+<suite thread-count="2" verbose="1" name="Wiki Suite" annotations="JDK" parallel="tests">
+         
+  <test name="Wiki1">
+	 <classes>
+	   <class name="TestngPkg1.Wiki1"/> 
+	 </classes>
+   </test>
+   
+  <test name="Wiki2">
+     <classes>
+       <class name="TestngPkg2.Wiki2"/>
+     </classes>
+   </test>
+</suite>
