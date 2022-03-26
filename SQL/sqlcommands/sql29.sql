@@ -1,0 +1,1 @@
+create index emp_jobfname_ix on employee_old(JOB, ENAME, SAL);

@@ -1,0 +1,1 @@
+select e.* from employee_old e, department d where e.DEPTNO=d.iddepartment;

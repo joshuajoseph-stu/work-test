@@ -1,0 +1,349 @@
+1) ansible install and then creation of ansible.cfg file and the inventory file.
+to verify 
+#################################################
+
+ubuntu@ip-172-31-1-19:/etc/ansible$ cat hosts
+servera ansible_ssh_host=35.154.95.167
+serverb ansible_ssh_host=35.154.157.167
+
+********************************************************************
+
+[student@workstation playbooks]$ ansible all --list-hosts
+  hosts (2):
+    servera
+    serverb
+[student@workstation playbooks]$ 
+#################################################
+
+
+2)Run some adhoc command
+
+syntax: ansible  hosts -m(module) modulename -a(arguments) argumentname
+
+#################################################
+[student@workstation playbooks]$  ansible all -m command -a 'hostname'
+servera | CHANGED | rc=0 >>
+servera.lab.example.com
+
+serverb | CHANGED | rc=0 >>
+serverb.lab.example.com
+################################################
+
+Not much clear
+
+3) Running the command with remote user
+###############################################
+[student@workstation playbooks]$ ansible all -m command -a 'whoami'
+serverb | CHANGED | rc=0 >>
+student
+
+servera | CHANGED | rc=0 >>
+student
+
+[student@workstation playbooks]$ ansible all -m command -a 'whoami' -u devops
+servera | CHANGED | rc=0 >>
+devops
+
+serverb | CHANGED | rc=0 >>
+devops
+################################################
+
+
+4) Running the command with super user privilege and sudo password
+################################################
+[student@workstation playbooks]$ ansible all -m command -a 'yum install httpd -y' -b
+servera.lab.example.com | FAILED! => {
+    "changed": false, 
+    "module_stderr": "Shared connection to servera.lab.example.com closed.\r\n", 
+    "module_stdout": "sudo: a password is required\r\n", 
+    "msg": "MODULE FAILURE\nSee stdout/stderr for the exact error", 
+    "rc": 1
+}
+serverb.lab.example.com | FAILED! => {
+    "changed": false, 
+    "module_stderr": "Shared connection to serverb.lab.example.com closed.\r\n", 
+    "module_stdout": "sudo: a password is required\r\n", 
+    "msg": "MODULE FAILURE\nSee stdout/stderr for the exact error", 
+    "rc": 1
+}
+
+[student@workstation playbooks]$ ansible all -m command -a 'yum install httpd -y' -b -K
+SUDO password: 
+################################################
+
+
+5) change the config file to your requirement
+###############################################
+
+ansible all -a "sudo useradd test2" -K || Works on ubuntu
+
+[student@workstation playbooks]$ ansible all -m command -a 'useradd amit' 
+servera.lab.example.com | CHANGED | rc=0 >>
+
+
+serverb.lab.example.com | CHANGED | rc=0 >>/
+
+--
+[student@workstation playbooks]$ cat ansible.cfg 
+[defaults]
+inventory=hosts
+remote_user=devops
+
+[privilege_escalation]
+become=True
+become_method=sudo
+become_user=root
+become_ask_pass=False
+###############################################
+
+
+
+6) To create first playbook and execute it 
+##############################################
+[student@workstation playbooks]$ cat first.yaml 
+- name: my first playbook
+  hosts: all
+  become: true
+  tasks:
+    - name: install the package
+      yum:
+        name: httpd
+        state: present
+
+
+    - name: install second package
+      yum:
+        name: vsftpd
+        state: present
+
+[student@workstation playbooks]$ ansible-playbook --syntax-check first.yaml
+[student@workstation playbooks]$ ansible-playbook  first.yaml 
+##############################################
+
+
+
+7) Displaying output of module working 
+#############################################
+
+
+register variable to capture the output and use debug module
+to display the output
+
+[student@workstation playbooks]$ cat first.yaml 
+- name: my first playbook
+  hosts: all
+  become: true
+  tasks:
+    - name: install the package
+      yum:
+        name: httpd
+        
+		state: present
+      register: vicky
+
+    - name: print the output
+      debug:  ###### Function to use print 
+        var: vicky.changed   # calling special parameter for vicky register
+#	var: vicky	     # call the full value for vicky register
+##############################################
+
+
+8) Using variable
+#############################################
+[student@workstation playbooks]$ cat first.yaml 
+- name: my first playbook
+  hosts: all
+  become: true
+  vars:
+    - var1: httpd  # declaring variable & passing value in it 
+  tasks:
+    - name: install the package
+      yum:
+        name: "{{ var1 }}" # using or calling the variable
+        state: present
+      register: vicky
+
+    - name: print the output
+      debug:
+        var: vicky.changed
+############################################
+Using var files
+[student@workstation playbooks]$ cat file1
+var1: httpd
+[student@workstation playbooks]$ cat first.yaml 
+- name: my first playbook
+  hosts: all
+  become: true
+  vars_files: #using the var files to declare variable in seperate file
+    - file1 
+  tasks:
+    - name: install the package
+      yum:
+        name: "{{ var1 }}" # using or calling the variable
+        state: present
+      register: vicky
+
+    - name: print the output
+      debug:
+        var: vicky.changed
+
+[student@workstation playbooks]$
+###########################################
+
+
+9) using array or list in task
+##########################################
+- name: my first playbook
+  hosts: all
+  become: true
+  tasks:
+    - name: install the package
+      yum:
+        name: "{{ item }}" # using or calling the variable
+        state: present
+      with_items:
+        - httpd
+        - vsftpd
+        - samba-client
+#########################################
+[student@workstation playbooks]$ cat second.yaml 
+- name: my first playbook
+  hosts: all
+  become: true
+  tasks:
+    - name: remove the package
+      yum:
+        name: "{{ item }}" # using or calling the variable
+        state: absent
+      loop:
+        - httpd
+        - vsftpd
+        - samba-client
+########################################
+
+10) Creating Vault and use it
+  ansible-vault create file1
+  cat file1
+  ansible-playbook first.yaml 
+  ansible-playbook --ask-vault-pass first.yaml 
+
+[student@workstation playbooks]$  cat first.yaml 
+- name: my first playbook
+  hosts: all
+  become: true
+  vars_files:
+    - file1
+  tasks:
+    - name: install the package
+      yum:
+        name: "{{ var1 }}" # using or calling the variable
+        state: present
+
+
+[student@workstation playbooks]$ cat file1 
+$ANSIBLE_VAULT;1.1;AES256
+38626662346539636161373566376362363562366362636539363831626436306366333864626664
+6238316234356363343532356262303838623031353465610a356239663935623861393862343734
+34396565353032643237376631323037633935633561326633353162636233393166316535333437
+3436616664653937340a333534623233363935393535386338303039383866333965633963353863
+6430
+
+#########################################
+
+
+11) Calling the facts
+#########################################
+- name: my first playbook
+  hosts: all
+  become: true
+  tasks:
+    - name: display the info
+      debug:
+        msg: "{{ ansible_hostname }}"
+#########################################
+for finding the default facts collected run the following commands
+ansible all -m setup
+and then use the customized facts to create the playbook
+
+[student@workstation playbooks]$ cat first.yaml 
+- name: my first playbook
+  hosts: servera.lab.example.com
+  become: true
+  tasks:
+    - name: display the info
+      debug:
+        msg: "{{ ansible_devices.vda.partitions.vda1.size }}"
+
+#########################################
+
+
+12) using facts as condition
+#########################################
+[student@workstation playbooks]$ ansible-playbook first.yaml 
+
+PLAY [my first playbook] ******************************************************************
+
+TASK [Gathering Facts] ********************************************************************
+ok: [servera.lab.example.com]
+ok: [serverb.lab.example.com]
+
+TASK [install the package on servera] *****************************************************
+skipping: [serverb.lab.example.com]
+ok: [servera.lab.example.com]
+
+PLAY RECAP ********************************************************************************
+servera.lab.example.com    : ok=2    changed=0    unreachable=0    failed=0   
+serverb.lab.example.com    : ok=1    changed=0    unreachable=0    failed=0   
+
+[student@workstation playbooks]$ cat first.yaml 
+- name: my first playbook
+  hosts: all
+  become: true
+  tasks:
+    - name: install the package on servera
+      yum:
+        name: httpd
+        state: present
+      when: "'servera' in ansible_hostname"
+###########################################
+
+
+13) using roles
+###########################################
+[student@workstation playbooks]$ ls roles/vishal/tasks/
+main.yaml
+[student@workstation playbooks]$ cat roles/vishal/tasks/main.yaml
+- name: install httpd
+  yum:
+    name: httpd
+    state: present
+[student@workstation playbooks]$ cat ansible.cfg 
+[defaults]
+inventory=hosts
+remote_user=devops
+roles_path=/home/student/playbooks/roles
+
+[privilege_escalation]
+become=True
+become_method=sudo
+become_user=root
+become_ask_pass=False
+[student@workstation playbooks]$ cat third.yaml 
+- name: using role
+  hosts: all
+  roles:
+    - vishal
+[student@workstation playbooks]$ ansible-playbook third.yaml 
+
+############################################
+
+
+ubuntu@ip-172-31-1-19:~$ ansible
+ansible             ansible-connection  ansible-doc         ansible-inventory   ansible-pull
+ansible-config      ansible-console     ansible-galaxy      ansible-playbook    ansible-vault
+
+### ansible linux -m setup || To check the facts , it collects informaton of Nodes,Facts runs automatically
+
+If we need to close the facts
+
+gater_facts=false || to disable facts into playbook

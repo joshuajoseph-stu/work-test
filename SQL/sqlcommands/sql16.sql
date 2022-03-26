@@ -1,0 +1,1 @@
+select e.* from employee_old e where e.SAL>(select avg(e2.SAL) from employee_old e2 where e2.DEPTNO=e.DEPTNO);

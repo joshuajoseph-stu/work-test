@@ -1,0 +1,94 @@
+[15:05] Dr. Aman K. (Guest)
+curl -L https://istio.io/downloadIstio | sh -
+
+[15:06] Dr. Aman K. (Guest)
+export  PATH=$PWD/bin;$PATH
+
+[15:08] Dr. Aman K. (Guest)
+istioctl install  --set profile=demo  -y
+
+[15:10] Dr. Aman K. (Guest)
+curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl
+
+[15:13] Sapana Chavan
+sudo apt-get install curl
+
+[15:13] Sapana Chavan
+sir we can go with this
+
+[15:14] Dr. Aman K. (Guest)
+apt-get install -y apt-transport-https
+
+[15:15] Dr. Aman K. (Guest)
+curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add
+
+[15:16] Dr. Aman K. (Guest)
+curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl
+
+[15:17] Dr. Aman K. (Guest)
+chmod +x ./kubectl
+
+[15:18] Dr. Aman K. (Guest)
+ls   /usr/local/bin/kubectl
+
+[15:19] Dr. Aman K. (Guest)
+mv ./kubectl /usr/local/bin/kubectl
+
+[15:24] Dr. Aman K. (Guest)
+kubectl version --client
+
+[15:30] Dr. Aman K. (Guest)
+curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 \
+
+> && chmod +x minikube \
+
+> && sudo mv minikube /usr/local/bin/
+
+[15:31] Dr. Aman K. (Guest)
+minikube version
+
+[15:31] Dr. Aman K. (Guest)
+minikube start --driver=none
+
+[15:32] Dr. Aman K. (Guest)
+apt install conntrack
+
+[15:33] Dr. Aman K. (Guest)
+minikube list-drivers
+
+[15:34] Dr. Aman K. (Guest)
+minikube drivers
+
+[15:59] Dr. Aman K. (Guest)
+MINIKUBE STATUS 
+kubectl get pods 
+kubectl get nodes 
+kubectl get services 
+kubectl get deployments 
+kubectl create deployment nasaengineering --image=k8s.gcr.io/echoserver:1.4 
+
+kubectl get deployments 
+kubectl get pods 
+kubectl create deployment devopsengineering --image=k8s.gcr.io/echoserver:1.4 
+
+kubectl get deployments 
+kubectl get pods 
+
+kubectl create deployment devenvironment --image=k8s.gcr.io/echoserver:1.4 
+
+kubectl get deployments 
+kubectl get pods 
+
+kubectl create deployment prodenvironment --image=k8s.gcr.io/echoserver:1.4 
+kubectl get deployments 
+kubectl get pods 
+
+kubectl create deployment testenvironment --image=k8s.gcr.io/echoserver:1.4 
+kubectl get deployments 
+kubectl get pods 
+kubectl config view 
+minikube addons list 
+cd /root/.minikube 
+ls 
+tree
+

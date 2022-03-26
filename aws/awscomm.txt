@@ -1,0 +1,23 @@
+1.Login to aws, go to ec2, start instance.name it and start it.
+2.go to "connect" button, ssh
+3. copy paste, run it in git bash in folder with the .pem file
+4.type yes, then run:
+
+sudo -i apt-get update
+sudo -i apt-get install apache2 -y
+
+5.then run:
+
+sudo ufw allow 'Apache'
+
+6.to start apache server, run:
+
+sudo systemctl status apache2
+
+7. in aws, copy paste the public ip to see apache homepage
+8.when done, run:
+
+sudo systemctl stop apache2
+
+9.to leave remote ubuntu, type exit
+10. le fin 
