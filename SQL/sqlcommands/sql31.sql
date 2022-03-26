@@ -1,0 +1,1 @@
+select EMPNO,ENAME,namedept from employee_old,department where employee_old.DEPTNO=department.iddepartment;

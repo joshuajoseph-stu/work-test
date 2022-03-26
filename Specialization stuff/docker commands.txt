@@ -1,0 +1,112 @@
+[14:41] Dr.  Aman K (Guest)
+ACCOMPLISHED
+
+itcs  csg COMPLIANT - GLOBAL STANDARDS
+
+Dockers Deployment
+
+apt install docker.io
+
+yum install docker
+
+DOCKER - OS LEVEL VIRTUALIZATIONS
+
+service docker status
+
+service docker restart
+
+service docker stop
+
+service docker start
+
+docker run -it --name PYCON python
+
+docker start CONTAINERID
+
+docker stop CONTAINERID
+
+docker pause CONTAINERID
+
+docker unpause CONTAINERID
+
+docker attach CONTAINERID
+
+docker network ls
+
+docker network create devnet
+
+docker network ls
+
+docker logs PYCON
+
+docker events
+
+docker port
+
+docker top
+
+docker ps
+
+docker ps -a
+
+[14:50] Dr.  Aman K (Guest)
+===============================
+
+DOCKERIZED CENTOS 
+
+service docker status 
+
+service docker stop 
+
+service docker start 
+
+systemctl start docker 
+
+systemctl --no-pager  
+
+systemctl status status
+
+service --status-all 
+===========================
+
+docker images centos
+
+docker inspect centos 
+
+CONNECT 1: docker events
+
+CONNECT 2: docker run -it --name CENCON centos
+
+CONNECT 3: 
+
+docker ps
+
+docker ps -a
+
+docker port
+
+docker top
+
+docker stop CONTAINTERID
+
+docker ps -a
+
+docker start CONTAINERID
+
+docker ps -a
+
+docker pause CONTAINERID
+
+docker ps -a
+
+docker unpause CONTAINERID
+
+docker ps -a
+
+docker attach CONTAINERID 
+
+#yum update
+
+#yum install docker 
+=================================
+

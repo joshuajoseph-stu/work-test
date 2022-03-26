@@ -1,0 +1,42 @@
+9/2/22 sql commands
+-----------------------
+1. select * from employee_old where DEPTNO in (select iddepartment from department);
+2. select e.* from employee_old e, department d where e.DEPTNO=d.iddepartment;
+3. select e.* from employee_old e where e.SAL>(select avg(e2.SAL) from employee_old e2 where e2.DEPTNO=e.DEPTNO);
+4. select * from employee_old where EMPNO = 7499;
+5. select * from employee_old where DEPTNO=20;
+6. select * from employee_old where DEPTNO in(10,30) order by DEPTNO desc;
+7. select JOB from employee_old;
+8. select ENAME from employee_old where ENAME LIKE 'J%';
+9. select * from employee_old order by EMPNO;
+10. select min(DEPTNO) from employee_old;
+11. select min(DEPTNO), max(DEPTNO) from employee_old;
+12. select (select min(DEPTNO) from employee_old) min_id, (select max(DEPTNO) from employee_old) max_id  from dual 
+13. create index emp_jobfname_ix on employee_old(JOB, ENAME, SAL);
+14. select * from employee_old where ENAME="CLARK";
+15. select EMPNO,ENAME,namedept from employee_old,department where employee_old.DEPTNO=department.iddepartment;
+16. select EMPNO,ENAME,namedept from employee_old,department;
+
+------------------------------------------
+10/2/22 ansible commands
+------------------------
+1. ansible all -m ping (to ping all servers)
+2. ansible all -a "df -h" (to see disk usage of all servers)
+3. ansible all -a "uptime" ( to see uptime of server)
+4. made firsttest.yml:
+---
+- hosts: all
+  tasks:
+  - name: Package installation
+    apt:
+      name:
+        - httpd
+        - git
+      state: latest
+5. ansible-playbook firsttest.yml --syntax-check
+6. ansible-playbook firsttest.yml (didnt work)
+7. ansible all -m shell -a "free -m" (to see ram usage)
+8. ansible all -m command -a 'hostname'
+9. ansible all -m 'whoami'
+10. ansible all -m command -a 'apt install git -y' -b -K
+11. ansible all -m command -a 'apt install apache2 -y' -b -K

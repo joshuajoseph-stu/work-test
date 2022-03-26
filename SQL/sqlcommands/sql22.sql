@@ -1,0 +1,1 @@
+select * from employee_old where DEPTNO in(10,30) order by DEPTNO desc;

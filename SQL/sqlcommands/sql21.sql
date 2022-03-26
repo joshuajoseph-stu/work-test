@@ -1,0 +1,1 @@
+select * from employee_old where DEPTNO=20;

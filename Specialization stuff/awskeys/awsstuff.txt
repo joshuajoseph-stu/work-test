@@ -1,0 +1,277 @@
+kubeadm token create --print-join-command
+--------------------------------------------
+kubeadm join 172.31.88.169:6443 --token qb0duy.aaktu2wwh0wa9h0m --discovery-token-ca-cert-hash sha256:9a69b2003cac50cef20124dd63da766321ff22fde66eada17c7084f9f98f906e
+
+-------------
+read_only1
+arn:aws:iam::551318225284:user/read_only1
+Readonly!
+
+EC2Admin
+arn:aws:iam::551318225284:user/EC2Admin
+Admin!123
+
+BillingReadOnly
+
+Bill24@dam
+Bill#haha!!23
+
+--------------
+22/2/22 - ec2 public & private
+1 VPC
+1 SN ( public)
+1 EC2 ( public - Auto Assign IP)
+1 IGW + VPC , + Public Route table. -- Can take RDP of EC2 instance.
+Add 0.0.0.0/0 to public route table. 
+Able to take RDP post adding IGW to VPC and attaching to Public Route table
+
+1 SN ( private)
+1 EC2 - private ( Auto assign ip- Disable)
+will be able to rdp of Private EC2 10.0.17.189 from PUBLIC EC2 34.238.176.57 only ( as both Priv IP 10.0.5.23 & 10.0.17.189 are in same VPC 10.0.0.0/16 / Network)
+
+public ec2: 
+public ip: 35.175.191.236
+username: Administrator
+pass: orP9y-lMIH&&DtZGEPBoLs2BaQVto$b7
+
+use mstsc
+
+private ec2:
+public ip: 55.0.1.18
+username: Administrator
+pass: 2)A26M&AyzLBW(Zf5*GCxH@I2XXgJ--6
+
+----------------------------
+
+23/2/22
+----------
+public:
+ip: ec2-18-232-52-13.compute-1.amazonaws.com
+user: Administrator
+pass: r4x.3-deR5WMr&wha%65fw)%rER&T=fI
+
+private:
+ip: 55.0.1.139
+user: Administrator
+pass: ;uo&uv?7cZ(L9M%A25?k$v?O4OIshwp$
+
+Create NAT GW ( + Elastic IP) - Create and attach to Priv RT , Private RT -> Associate it to Private SN
+
+PUBLIC RT -> Associate it to PUB SN
+
+TEST : If you are able to take RDP of Private Instance from Public Instance and if Internet works in Private Instance.
+
+CLEANING of Resources : Delete NAT GW , Release Elastic IP . terminate EC2 instances
+------------------------------------
+
+original
+ami name: ami-0c19f80dba70861db
+root device name: /dev/sda1
+
+---------------------------------------------
+•Peering of 2 diff Regions VPC
+
+•1) VPC#01 – N.Virginia 10.0.0.0/16 CIDR
+
+•Public SN – 10.0.0.0/20 , ADD IGW to VPC and Public RT ( RDP from internet)
+
+•Create 1 Ec2 in Public SN ( Auto Assign IP enabled)
+
+•2) VPC #02 – Ohio 192.168.0.0/16
+
+•Priv SN – 192.168.1.0/24 , 1 Ec2 instance ( Auto Assign IP disabled), Priv RT associated to Priv SN
+
+•3) Peering connection :
+
+•Go to Primary VPC location ( Nv) – Peering conn: Name : Nv_Ohio Peer
+
+•Select local VPC to peer with : < Ohio VPC ID > & CIDR : 192.168.0.0/16
+
+•Select another VPC to peer : My account , Another region,
+
+•VPC ID : < Acceptor /Ohio> , VPC ID : < NV> 
+
+•NV – Peering should be accepted
+
+•RT : ( NV Pub RT) – Add SN of Ohio 192.168.1.0/24
+
+•RT: ( Ohio Priv RT) – Add SN of NV 10.0.0.0/20
+
+•Check RDP of Priv Ec2 ( ohio) from public Ec2( NV) . Internet will be accessible.
+
+-----------------------------------
+nv1 : 
+dns: ec2-44-200-93-182.compute-1.amazonaws.com
+username: Administrator
+password: RDuTzYBteZAI!V%=YW=ll2kD(B-YKUD(
+
+ohio1:
+vpc: vpc-04e1edb6216aa0969
+ip: 192.168.1.74
+username: Administrator
+pass: kZ8p-lhzD3P2&Xt57ARB?=?dmRYmr;uA
+-------------------------------------------
+email to umayal_be@yahoo.com
+----------------------------
+[09:51] LP322
+1) IAM Role CreationCreate user
+group name: EC2 Admin
+Role : EC2 Read Only accessTest : Login Account using created username and check if you are able to access Billing, if you are able to create IAM roles, if you are able to create EC2 instancesScreencapture :
+Created User details
+group created
+Role created
+result when you access billing tab, IAM tab and error while launching instances ( final step)
+2) IAM Role CreationCreate second user
+group name: billing only
+Role : Billing read onlyTest : Login Account using created username and check if you are able to access Billing,Screencapture :
+Created User details
+group created
+Role created
+result when you access billing tab3) VPC creationVPC - 192.168.0.0/16
+Public SN - 4096 IP ( CIDR?)
+Private SN - 256 IP ( CIDR?)
+Create Route table for Public and Private ( Associate Public Ec2 - Public RT & Priv SN - Priv SN)
+Create IGW - Add to VPC & Public RTCreate Public Ec2 instance and check if you are able to access InternetPlease share Previous captured screenshot :4) Please share Previous captured VPC peering screenshots
+5) Please share Previous captured : Able to access internet via Private Ec2 using NAT gateway + Elastic IP
+6) Billing alert configured to your email address
+7) Ec2 rescue tool used to recover access to EC2 instance
+8) Access EC2 via SSM - if SSM agent installed, EC2 should appear in SSM ( node mgmt - fleet mgr console)
+
+
+[09:54] LP322
+for Point 3 - 
+
+[09:54] LP322
+Capture:SN details
+RT , Subnet associate for Public and Private
+Ec2 - Public , IGW - RT
+Login to EC2 - Access google
+
+-------------------------------------------------
+2/3/22
+#!/bin/bash
+sudo apt-get update -y
+sudo apt-get install apache2 -y
+
+ALB -
+
+
+
+2 ways
+
+
+
+Path based routing
+Host based routing
+
+
+
+Path based routing -
+
+
+
+4 instances
+
+
+
+2 instance - IP ( 1 TG)
+2 instance ip/shopping ( 2nd TG)
+
+
+
+1) Create 2 instance ( LB) -
+SG - All traffic Anywhere 0.0.0.0/0
+
+
+
+linux, install apache , web server ( <ip>
+connect to both instances and perform below
+
+
+
+sudo su
+yum install httpd -y
+systemctl start httpd
+systemctl enable httpd
+cd /var/www/html
+vi index.html
+( hit i to insert) ,
+<h1> This is Application Load Balancer Example server 1 </h1>
+(hit esc key to come out of insert option)
+:wq! ( to save and exit)
+
+
+
+check if you are able to access instance via Public IP in IE
+
+
+
+--------------------------
+
+
+
+Create 2 more instance ( path based ip/shopping)
+( Accessible via Internet using Public IP)
+
+
+
+
+2) Create 1 Target group ( 2 instances) - first 2 servers
+( default) Give name for Target group. add 2 instances
+
+
+
+
+3) Application LB configuration >
+
+
+
+Name of ALB
+scheme - Internet facing
+az - choose all 6 zones
+Sg: Create new SG ( All traffic IPV4 0.0.0.0/0)
+
+
+
+Routing : Choose Target 1( Server 1 & 2)
+review and Launch
+
+------------------------------------
+3/3/22
+-----------
+AUTO SCALING GROUP ( Fleet mgt) :
+----------------------
+
+
+
+1) Launch instance > Create Image as ASG depends on EC2 / Images to scale up
+
+
+
+2) Create Load Balancer ( CLB here) ( EC2 / Skip & add Image later) , CHOOSE TCP port 80
+
+
+
+3) Create target group ( CHOOSE TCP port 80 )
+
+
+
+4) ASG launch Configuration
+
+
+
+5) ASG - auto scaling group
+----------
+sudo su
+[12:20] LP322
+top 
+
+[12:20] LP322
+to spike CPU in Linux instance - 
+
+[12:20] LP322
+yes > /dev/null &
+
+[12:20] LP322
+killall yes
+

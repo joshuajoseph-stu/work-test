@@ -1,0 +1,120 @@
+steps to make ssh 
+
+On Server end:
+
+1) First  run ----> ssh-keygen -t rsa ---> to make ssh key  
+
+
+azureuser@servervm:/etc/ansible$ ssh-keygen -t rsa
+Generating public/private rsa key pair.
+Enter file in which to save the key (/home/azureuser/.ssh/id_rsa):
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+Your identification has been saved in /home/azureuser/.ssh/id_rsa.
+Your public key has been saved in /home/azureuser/.ssh/id_rsa.pub.
+The key fingerprint is:
+SHA256:BRrq2PCc9YtVghUnOB3/DpKPQMUrvi+6y4l3SZtjwsQ azureuser@servervm
+The key's randomart image is:
++---[RSA 2048]----+
+|      .+Bo.      |
+|     .o*o=       |
+|  . . =...+      |
+|   B +...= .     |
+|  ..*...S . .    |
+|    E o+ = o     |
+|   o ..=o . .    |
+|   o+.X          |
+|  ..*B +.        |
++----[SHA256]-----+
+azureuser@servervm:/etc/ansible$
+
+
+azureuser@servervm:~/.ssh$ ls -la
+total 20
+drwx------ 2 azureuser azureuser 4096 Oct 29 18:32 .
+drwxr-xr-x 6 azureuser azureuser 4096 Oct 29 18:30 ..
+-rw------- 1 azureuser azureuser  553 Oct 29 18:23 authorized_keys
+-rw------- 1 azureuser azureuser 1679 Oct 29 18:32 id_rsa
+-rw-r--r-- 1 azureuser azureuser  400 Oct 29 18:32 id_rsa.pub
+
+
+2) sudo chmod 644 authorized_keys
+
+azureuser@servervm:~/.ssh$
+azureuser@servervm:~/.ssh$ sudo chmod 644 authorized_keys
+
+azureuser@servervm:~/.ssh$ cat id_rsa.pub
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDrxCw6q57qtFWMl2rF0wRsDDFNB8CT123Y6S0mlgbxPcECO/OByVvAw2DWciKXvlZcxZjErIOtaS0NVJeNYBsYqS/z3TDvKAUWKGI5FqimsG2n93eCXv4ZTDBL        AtAd0Kwy4pMzJcasEEApcyKeBYLb+fe9spA/LSIXmPSZLqQDKzuCyEkk6ebj6OXWoLHtb9WCRODDl2wbsBflQl3JvOeXqo5mIfg1aOXQlkd0YvBWCLtzcuAtGsMNElh7MDhFTZilPYVAwxE46mMdpTpjCYGgYVyc        LEUdAhkz1wsLoYPwXozLHaNm7EIfN9I8vJD3nmB7Fa90OtiTLkO9LipBxGA3 azureuser@servervm
+
+
+3) cat id_rsa.pub | Copy the output of this command 
+
+
+azureuser@servervm:~/.ssh$ sudo service sshd restart
+azureuser@servervm:~/.ssh$
+
+
+
+azureuser@servervm:~/.ssh$ ansible all -m command -a 'hostname'
+
+
+[DEPRECATION WARNING]: Distribution Ubuntu 18.04 on host server should use /usr/bin/python3, but is using /usr/bin/python for backward compatibility with prior
+ Ansible releases. A future Ansible release will default to using the discovered platform python for this host. See
+https://docs.ansible.com/ansible/2.9/reference_appendices/interpreter_discovery.html for more information. This feature will be removed in version 2.12.
+Deprecation warnings can be disabled by setting deprecation_warnings=False in ansible.cfg.
+server | CHANGED | rc=0 >>
+clientvm
+azureuser@servervm:~/.ssh$
+azureuser@servervm:~/.ssh$
+
+
+********************************************************************************************************************************************************
+
+
+On Client End:
+
+
+Go to , home directory 
+
+cd .ssh , we have to go to authorized_keys file and paste the output which we copied from Server end.
+
+
+
+azureuser@clientvm:~$ ls -la
+total 32
+drwxr-xr-x 5 azureuser azureuser 4096 Oct 29 18:29 .
+drwxr-xr-x 3 root      root      4096 Oct 29 18:27 ..
+-rw-r--r-- 1 azureuser azureuser  220 Apr  4  2018 .bash_logout
+-rw-r--r-- 1 azureuser azureuser 3771 Apr  4  2018 .bashrc
+drwx------ 2 azureuser azureuser 4096 Oct 29 18:29 .cache
+drwx------ 3 azureuser azureuser 4096 Oct 29 18:29 .gnupg
+-rw-r--r-- 1 azureuser azureuser  807 Apr  4  2018 .profile
+drwx------ 2 azureuser azureuser 4096 Oct 29 18:27 .ssh
+azureuser@clientvm:~$
+azureuser@clientvm:~$
+azureuser@clientvm:~$
+azureuser@clientvm:~$ cd .ssh
+
+azureuser@clientvm:~/.ssh$ ls -la
+total 12
+drwx------ 2 azureuser azureuser 4096 Oct 29 18:27 .
+drwxr-xr-x 5 azureuser azureuser 4096 Oct 29 18:29 ..
+-rw------- 1 azureuser azureuser  553 Oct 29 18:27 authorized_keys
+azureuser@clientvm:~/.ssh$
+azureuser@clientvm:~/.ssh$
+azureuser@clientvm:~/.ssh$ sudo chmod 644 authorized_keys
+azureuser@clientvm:~/.ssh$
+azureuser@clientvm:~/.ssh$
+azureuser@clientvm:~/.ssh$ sudo vi authorized_keys
+azureuser@clientvm:~/.ssh$
+
+azureuser@clientvm:~/.ssh$ cat authorized_keys
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDrxCw6q57qtFWMl2rF0wRsDDFNB8CT123Y6S0mlgbxPcECO/OByVvAw2DWciKXvlZcxZjErIOtaS0NVJeNYBsYqS/z3TDvKAUWKGI5FqimsG2n93eCXv4ZTDBLAtAd0Kwy4pMzJcasEEApcyKeBYLb+fe9spA/LSIXmPSZLqQDKzuCyEkk6ebj6OXWoLHtb9WCRODDl2wbsBflQl3JvOeXqo5mIfg1aOXQlkd0YvBWCLtzcuAtGsMNElh7MDhFTZilPYVAwxE46mMdpTpjCYGgYVycLEUdAhkz1wsLoYPwXozLHaNm7EIfN9I8vJD3nmB7Fa90OtiTLkO9LipBxGA3 azureuser@servervm
+
+
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDBtBih4CyHO5B0iXTwpf4jjqYLBqchN7GxwtO+anaGY/tVF5JmdcI2jFEE7gLmLc4y/XeFFr17EqQaGGiO+NU/L++vcUBrd4iB3Ig2kVft5aintQ76uqwkRmPbySe4T4TF5F+JU3ZBqDrH54M2KrBUi1XYfGX7VQtv/7qBejaFJ2DqbPwfb/JaGWAyI7lMcdLzZJ+H/4wATnMuD3jSnMrtcZFiAgs7m/YW87W6wTPeLJmNtnxmF8ciNkv7mqwwWL9V31ZvhX20DaGWdxAOfZDtd8fK9AdEOe4FUHiDhM/TX5n9yzRF/qiDXjooHpuCv7E/Yd9xLaQUNp6oOfO7s9qBXrowrL3/XoCR9oEo5mQXdbmCY45csaeJRjw2VJqYwb575Pkm1eOH/UN094V8GYt9qr7Ux3dQXJrqLu/1ww2Zf1bdqA+NX6shzcc2EYuK99XUKJIakIzHwgtGG4L89gurM+XC+CqdJp9j3ImfznLaWhbyrClyPlH9ekxYPm2Nb4E=
+azureuser@clientvm:~/.ssh$
+azureuser@clientvm:~/.ssh$
+azureuser@clientvm:~/.ssh$
+azureuser@clientvm:~/.ssh$ pwd
+/home/azureuser/.ssh

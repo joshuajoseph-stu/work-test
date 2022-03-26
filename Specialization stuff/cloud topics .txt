@@ -1,0 +1,59 @@
+Topics covered so far in last 4 days 
+
+
+Syllabus 	Day 
+ 	 
+CLOUD COMPUTING	DAY 1
+
+
+Types of Cloud Computing ( IaaS, PaaS, SaaS) 
+Comparison of AWS vs Azure vs GCP
+Architecture of Cloud Computing
+Billing comparison
+AWS Global Infrastructure
+AWS Regions , AZ, 
+Aws account creation , services, console review, Billing alerts ( Practical) 
+VPC basics, Creation of VPC & Subnets, Terminology
+ 
+IAM roles – Permission, Policy 
+IAM Users and Groups
+IAM Permission 
+IAM Policy Inheritance
+IAM Policy Structure
+IAM Password Policy 
+IAM Roles for Service
+IAM Guidelines and Practice
+IAM Role creation ( Practical) 
+ 	 
+
+ 	 
+EC2 	Day 2,3,4
+
+
+
+EC2 Sizing and configuration
+EC2 User Data
+EC2 Instance overview
+EC2 Instance Types 
+Ports to be open in Security group for EC2 
+EC2 Instance Purchasing option
+EC2 Pricing 
+EC2 Practical ( Windows / Linux EC2 instance creation lab, 
+Placement groups, ENI 
+NAT GW, IGW, EC2 in Public Sn, EC2 in Private SN, ( lab) 
+Reset Windows EC2 Instance in AWS Password|
+Retrieve Windows administrator password ( if Ec2 created from AMI, using Ec2 rescue tool) - LAB
+Access EC2 via SSM , installation of SSM agent in EC2 and SSM role creation ( LAB)
+VPC Peering , Lab
+ 
+
+
+ 
+EBS Volume 	             Day  4 
+
+
+EBS Snapshot 
+EBS VolumeTypes
+EBS Encryption
+EBS Practical 
+

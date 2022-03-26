@@ -1,0 +1,1 @@
+select min(DEPTNO), max(DEPTNO) from employee_old;

@@ -1,0 +1,1 @@
+select ENAME from employee_old where ENAME LIKE 'J%';
